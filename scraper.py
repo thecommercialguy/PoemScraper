@@ -99,19 +99,6 @@ def extract_text(els):
 
     return stanza_text
 
-# RETURNS A TITLE
-def get_title():
-    stanzas = get_stanzas()
-    # print(len(stanzas))
-    i = 0
-    for stanza in stanzas:
-        # i+=1
-        if stanza[0].css.select('span > b'):
-            i += 1
-
-    # print(i)
-    
-
     
 
 resposne = requests.get('https://www.gutenberg.org/files/43224/43224-h/43224-h.htm')
@@ -127,7 +114,7 @@ poem_objs = build_poems(poems)
 
 with open("ouput.json", "w") as outfile:
     json.dump(poem_objs, outfile, indent=4)
-print(len(poem_objs))
+
 
 
 

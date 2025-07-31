@@ -49,22 +49,26 @@ def build_poem(poem):
     title_el = all_stanzas[0].css.select('span > b')
     poet_el = all_stanzas[len(all_stanzas) - 1].css.select_one('span > i')
 
-    # if len(title_el) > 1: 
-    #     return None
-
     if not title_el:
         return  None # may throw an error here 
     
     if not poet_el:
         return None
     
+
+    # EXTRACTING TITLE AND POET TEXT
     title = title_el[0].get_text()
     poet = poet_el.get_text()
     
+
+    # ACCESSING ASSUMED POEM BODY
     body = all_stanzas[1:len(all_stanzas)-1]
 
     stanzas = []
 
+
+    # ITERATING OVER DIV.STANZA AND STORING IT'S
+    # CHILD SPAN'S STRINGS OF TEXT
     for stanza in body:
         stanza_spans = stanza.find_all('span')
         stanza_text = extract_text(stanza_spans)
@@ -77,7 +81,7 @@ def build_poem(poem):
         return None
 
 
-
+    # STORING "CLEANED" DATA IN POEM OBJECT
     poem_obj = {
         "title": title,
         "poet": poet,
@@ -103,7 +107,6 @@ def extract_text(els):
 
 resposne = requests.get('https://www.gutenberg.org/files/43224/43224-h/43224-h.htm')
 html_data = resposne.text
-# print(resposne.text)
 
 soup = BeautifulSoup(html_data, 'html.parser')
 

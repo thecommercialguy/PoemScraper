@@ -117,14 +117,3 @@ poem_objs = build_poems(poems)
 
 with open("ouput.json", "w") as outfile:
     json.dump(poem_objs, outfile, indent=4)
-
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,678 @@
+[
+  {
+    "word": "god's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "god"
+  },
+  {
+    "word": "life's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "life"
+  },
+  {
+    "word": "earth's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "earth"
+  },
+  {
+    "word": "moon's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "moon"
+  },
+  {
+    "word": "fool's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "fool"
+  },
+  {
+    "word": "men's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "men"
+  },
+  {
+    "word": "what's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "what"
+  },
+  {
+    "word": "duke's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "duke"
+  },
+  {
+    "word": "eve's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "eve"
+  },
+  {
+    "word": "satan's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "satan"
+  },
+  {
+    "word": "sun's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "sun"
+  },
+  {
+    "word": "man's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "man"
+  },
+  {
+    "word": "mary's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "mary"
+  },
+  {
+    "word": "angel's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "angel"
+  },
+  {
+    "word": "woman's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "woman"
+  },
+  {
+    "word": "faith's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "faith"
+  },
+  {
+    "word": "tomorrow's",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": "tomorrow"
+  },
+  {
+    "word": "tree",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "understands",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "heart",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "remembered",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "gold",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "again",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "and",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "red",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "swallow",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "blue",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "world",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "edge",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "bold",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "come-the",
+    "error": null,
+    "isParentWord": true
+  },
+  {
+    "word": "come",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "the",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "bloom",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "elder",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "mist",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "white",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "wind",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "heaven",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "descended",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "sea",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "pain",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "picture",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "place",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "bought",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "so",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "cheap",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "with",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "child",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "bodies",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "girl",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "minds",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "and",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "boy",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "my",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "with",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "dragon",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "goddes",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "world",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "wrath",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "battle",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "sea",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "tide",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "man",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "fell",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "and",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "deep",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "master",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "poet",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "honey",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "horn",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "light",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "grass",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "seed",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "fire",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "worn",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "full",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "fold",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "salt",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "winter",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "star",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "morning",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "light",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "many",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "sea",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "salt",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "small",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "honey",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "seeking",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "golden",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "red-purple",
+    "error": null,
+    "isParentWord": true
+  },
+  {
+    "word": "red",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "purple",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "star",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "beams",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "mountain",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "brooks",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "human",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "sky",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "ships",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "flame",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "then",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "sunset",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "night",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "city",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "life",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "cloud",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "mountain",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "heights",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "cottage",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "hill",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "flowers",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  },
+  {
+    "word": "wood",
+    "isLowFreq": false,
+    "error": null,
+    "headWord": ""
+  }
+]

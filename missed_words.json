@@ -1,443 +1,82 @@
 [
   {
-    "word": "raught",
-    "error": "401: Parse Error"
-  },
-  {
     "word": "invarious",
     "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
-    "word": "gean-tree",
+    "word": "lavengro",
     "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "listens-understands",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "heart-remembered",
-    "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "thaumalogue",
     "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
-    "word": "whey-bearded",
+    "word": "okeanos",
     "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
-    "word": "gold-rimmèd",
+    "word": "kimmerian",
     "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "again-and",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "hawthorn-hedge",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "hawthorn-blooms",
-    "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "kuprian's",
     "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "phoibos",
     "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "red-shod",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "swallow-blue",
-    "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "πὁτνια",
     "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "photnia",
     "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "divers-hued",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "world-edge",
-    "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "fivesweet",
     "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "thoughtthou",
     "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "nay-bold",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "come-the",
-    "error": "404: Not Found"
-  },
-  {
-    "word": "bloom-elder",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "mist-white",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "wind-brushed",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "tsar, tsarevitch, tsarina, tsarism",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "heaven-descended",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "sea-echoing",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "pain-haunted",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "picture-place",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "bought-so",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "cheap-with",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "child-bodies",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "girl-minds",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "comforts-and",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "boy-my",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "brutal-with",
-    "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "rosicross",
     "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "dragon-guarded",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "goddes-bane",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "world-wrath",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "battle-thrill",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "sea-tide",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "christus",
-    "error": "401: Parse Error"
-  },
-  {
-    "word": "man-abhorr'd",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "smote-fell",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "sangar-and",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "deep-hued",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "underlands",
-    "isLowFreq": true,
-    "error": "401: Parse Error"
-  },
-  {
-    "word": "master-poet",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "droning-lone",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "honey-horn",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "firefly-light",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "grass-seed",
-    "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "m'amour",
     "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "fire-worn",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "clover-starred",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "full-fold",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "salt-chased",
-    "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "earandel",
     "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "winter-star",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "morning-light",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "many-foamed",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "sea-orchard",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "salt-crusted",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "poplar-shaded",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "small-leafed",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "honey-seeking",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "golden-banded",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "red-purple",
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "atimetus",
     "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   },
   {
     "word": "homonoea",
     "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "star-beams",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "mountain-brooks",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "brutish-human",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "sky-ships",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "radiant-masted",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "flame-then",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "sunset-smitten",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "night-unfettered",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "city-life",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "fir-clad",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "cloud-galleons",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "mountain-heights",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "careless-hearted",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "cottage-clustered",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "hill-flowers",
-    "isLowFreq": true,
-    "error": "404: Not Found"
-  },
-  {
-    "word": "fir-wood",
-    "isLowFreq": true,
-    "error": "404: Not Found"
+    "error": "401: Not an ed word"
   }
 ]

@@ -2,60 +2,6 @@ import json
 import time
 import requests
 from bs4 import BeautifulSoup
-# from scraper import get_freq
-
-# <div class="left-content col position-relative overflow-hidden" 
-# id="left-content" data-word-click="enabled"> -- CONTAINER ENTRY
-# ⬇️
-# <div id="dictionary-entry-1" class="entry-word-section-container">  -- PER PART OF SPEECH
-# ⬇️ ⬇️
-#    <div class="row entry-header"> 
-#    ⬇️ ⬇️
-# ⬇️ ⬇️ <div class="entry-header-content d-flex flex-wrap align-items-baseline flex-row mb-0"> -- WORD CONTAINER
-# ⬇️ ⬇️ ⬇️ ⬇️ 
-# ⬇️ ⬇️ ⬇️ *<h1 class="hword">dog</h1> -- WORD
-#    ⬇️ <h2 class="parts-of-speech"><a class="important-blue-link" href="/dictionary/noun">noun</a></h2> -- PART OF SPEECH
-# <a class="play-pron-v2 text-decoration-none prons-entry-list-item d-inline badge mw-badge-gray-300" data-lang="en_us" data-file="dog00002" data-dir="d" href="https://www.merriam-webster.com/dictionary/dog?pronunciation&amp;lang=en_us&amp;dir=d&amp;file=dog00002" data-url="https://www.merriam-webster.com/dictionary/dog?pronunciation&amp;lang=en_us&amp;dir=d&amp;file=dog00002" title="How to pronounce dog (audio)">ˈdȯg&nbsp;<svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg" data-inject-url="https://www.merriam-webster.com/dist-cross-dungarees/2025-07-31--18-53-56-bbman/images/svg/audio-pron-redesign.svg" class="svg replaced-svg"><title>How to pronounce dog (audio)</title>
-# <path fill-rule="evenodd" clip-rule="evenodd" d="M13.513 6.34363C13.513 4.21463 12.623 2.33405 10.7864 0.687267L11.4026 0C13.406 1.79629 14.436 3.91633 14.436 6.34363C14.436 8.77387 13.3787 10.9297 11.3318 12.7981L10.7095 12.1163C12.6005 10.3902 13.513 8.4697 13.513 6.34363ZM10.8305 6.33811C10.8305 5.19038 10.2301 3.91597 8.89573 2.50719L9.5659 1.87241C10.9804 3.36579 11.7536 4.85692 11.7536 6.33811C11.7536 8.50095 10.6077 9.83479 9.56034 10.9028L8.90129 10.2565C9.91606 9.22174 10.8305 8.11681 10.8305 6.33811ZM0 8.6107V4.0387H3.23077L6.46154 1.75408V10.959L3.11169 8.6107H0Z" fill="#4A7D95"></path>
-# </svg></a>
-
-
-# div.entry-word-container > div.vg  ( CONTAINS DEFINTIONS )
-# div.vg > div.vg-sseq-entry-item[]  (Each "definiton , which may contain multiple variants")
-# div.vg-sseq-entry-item > div.sb has-num has-let ms-lg-4 ms-3 w-100~  contains senses?
-# div.sb has-num has-let ms-lg-4 ms-3 w-100~ > div.sb-0 sb-entry~ primary sense?
-# || if sb-entry has subcontent, ie div.class="sense-content w-100"
-#   ⬇️
-# span.class="dtText" defintion
-# div.sub-content-thread mb-3 example (may have multiple)
-# ~ FOR sn-entry in sb has-num has-let ms-lg-4 ms-3 w-100 || vg-sseq-entry-item (higher)
-# https://www.merriam-webster.com/dictionary/strident
-
-# "IF" defHedword
-
-# if AFTER search, word appears to be not found, 
-# attempt dictionary.com logic
-
-
-# if word NOT IN, if the word passing "freq", if the word not in x, define the word
-
-# this is an edge case 
-# 'entry-uros has-single-def'
-# should only have a pos
-
-# class="vg-sseq-entry-item " as "sense"
-# for class="sb-0 sb-entry" in "sesne" (vg-sseq-...)
-# IF class="sense has-sn has-num" -- Likely the first entry per sense
-# IF class="sense has-sn" -- Likely NOT first entry
-# IF class="sense  no-subnum" -- Likely NOT first entry
-# class="sense-content w-100" will LIKELY contain senseIdx data
-# class="dt hasSdSense" will LIKELY contain DEFINTION per senseIdx
-# class="dt "  will LIKELY contain DEFINTION per senseIdx
-# class="sdsense" > WILL LIKELY CONTAIN EXAMPLE
-# class="sdsense > "class="dtText" WILL LIKELY CONAIN "direct" EXAMPLE TEXT
-
-
-
 
 def get_definitions(word):
     resposne = requests.get(f'https://www.merriam-webster.com/dictionary/{word}')
@@ -174,3 +120,54 @@ print(len(poem_objs))
 # Something about IF it contains a DT (definition text) -> Check for an example (div.sub-content-thread mb-3) 
 # <div class="sense-content w-100"> each of the prior mentioned contained here (OF the sb_entry)
 # IF not DT, the "text" will represent something like "informal" (usage label)
+# from scraper import get_freq
+
+# <div class="left-content col position-relative overflow-hidden" 
+# id="left-content" data-word-click="enabled"> -- CONTAINER ENTRY
+# ⬇️
+# <div id="dictionary-entry-1" class="entry-word-section-container">  -- PER PART OF SPEECH
+# ⬇️ ⬇️
+#    <div class="row entry-header"> 
+#    ⬇️ ⬇️
+# ⬇️ ⬇️ <div class="entry-header-content d-flex flex-wrap align-items-baseline flex-row mb-0"> -- WORD CONTAINER
+# ⬇️ ⬇️ ⬇️ ⬇️ 
+# ⬇️ ⬇️ ⬇️ *<h1 class="hword">dog</h1> -- WORD
+#    ⬇️ <h2 class="parts-of-speech"><a class="important-blue-link" href="/dictionary/noun">noun</a></h2> -- PART OF SPEECH
+# <a class="play-pron-v2 text-decoration-none prons-entry-list-item d-inline badge mw-badge-gray-300" data-lang="en_us" data-file="dog00002" data-dir="d" href="https://www.merriam-webster.com/dictionary/dog?pronunciation&amp;lang=en_us&amp;dir=d&amp;file=dog00002" data-url="https://www.merriam-webster.com/dictionary/dog?pronunciation&amp;lang=en_us&amp;dir=d&amp;file=dog00002" title="How to pronounce dog (audio)">ˈdȯg&nbsp;<svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg" data-inject-url="https://www.merriam-webster.com/dist-cross-dungarees/2025-07-31--18-53-56-bbman/images/svg/audio-pron-redesign.svg" class="svg replaced-svg"><title>How to pronounce dog (audio)</title>
+# <path fill-rule="evenodd" clip-rule="evenodd" d="M13.513 6.34363C13.513 4.21463 12.623 2.33405 10.7864 0.687267L11.4026 0C13.406 1.79629 14.436 3.91633 14.436 6.34363C14.436 8.77387 13.3787 10.9297 11.3318 12.7981L10.7095 12.1163C12.6005 10.3902 13.513 8.4697 13.513 6.34363ZM10.8305 6.33811C10.8305 5.19038 10.2301 3.91597 8.89573 2.50719L9.5659 1.87241C10.9804 3.36579 11.7536 4.85692 11.7536 6.33811C11.7536 8.50095 10.6077 9.83479 9.56034 10.9028L8.90129 10.2565C9.91606 9.22174 10.8305 8.11681 10.8305 6.33811ZM0 8.6107V4.0387H3.23077L6.46154 1.75408V10.959L3.11169 8.6107H0Z" fill="#4A7D95"></path>
+# </svg></a>
+
+
+# div.entry-word-container > div.vg  ( CONTAINS DEFINTIONS )
+# div.vg > div.vg-sseq-entry-item[]  (Each "definiton , which may contain multiple variants")
+# div.vg-sseq-entry-item > div.sb has-num has-let ms-lg-4 ms-3 w-100~  contains senses?
+# div.sb has-num has-let ms-lg-4 ms-3 w-100~ > div.sb-0 sb-entry~ primary sense?
+# || if sb-entry has subcontent, ie div.class="sense-content w-100"
+#   ⬇️
+# span.class="dtText" defintion
+# div.sub-content-thread mb-3 example (may have multiple)
+# ~ FOR sn-entry in sb has-num has-let ms-lg-4 ms-3 w-100 || vg-sseq-entry-item (higher)
+# https://www.merriam-webster.com/dictionary/strident
+
+# "IF" defHedword
+
+# if AFTER search, word appears to be not found, 
+# attempt dictionary.com logic
+
+
+# if word NOT IN, if the word passing "freq", if the word not in x, define the word
+
+# this is an edge case 
+# 'entry-uros has-single-def'
+# should only have a pos
+
+# class="vg-sseq-entry-item " as "sense"
+# for class="sb-0 sb-entry" in "sesne" (vg-sseq-...)
+# IF class="sense has-sn has-num" -- Likely the first entry per sense
+# IF class="sense has-sn" -- Likely NOT first entry
+# IF class="sense  no-subnum" -- Likely NOT first entry
+# class="sense-content w-100" will LIKELY contain senseIdx data
+# class="dt hasSdSense" will LIKELY contain DEFINTION per senseIdx
+# class="dt "  will LIKELY contain DEFINTION per senseIdx
+# class="sdsense" > WILL LIKELY CONTAIN EXAMPLE
+# class="sdsense > "class="dtText" WILL LIKELY CONAIN "direct" EXAMPLE TEXT

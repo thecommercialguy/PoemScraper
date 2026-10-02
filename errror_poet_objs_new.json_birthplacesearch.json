@@ -1,0 +1,13 @@
+[
+  {
+    "first_name": "Adolf",
+    "middle_name": null,
+    "last_name": "Wolff",
+    "birth_date": null,
+    "nationality": null,
+    "birth_place": null,
+    "alt_names": [],
+    "profile_picture_url": null,
+    "error": "list index out of range"
+  }
+]

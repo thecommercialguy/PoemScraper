@@ -21,58 +21,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from concurrent.futures import ThreadPoolExecutor
 
-
-# options = Options()
-# options.add_argument("--headless=new")                 # much faster for automated runs
-# options.add_argument("--disable-gpu")
-# options.add_argument("--no-sandbox")
+webster_sem = asyncio.Semaphore(10)
+dictionary_sem = asyncio.Semaphore(25)
+datamuse_sem = asyncio.Semaphore(25)
+wiktionary_sem = asyncio.Semaphore(25)
+dash_sem = asyncio.Semaphore(25)
+wiktionary_extra_sem = asyncio.Semaphore(25)
+accent_sem = asyncio.Semaphore(25)
+ed_sem = asyncio.Semaphore(25)
 
 mispelled_text = "The word you've entered isn't in the dictionary. Click on a spelling suggestion below or try again using the search bar above."
-# options.add_argument("window-size=1200X600")
 
-# prefs = {"profile.managed_default_content_settings.images": 2}
-# options.add_experimental_option("prefs", prefs)
-# options.page_load_strategy = "eager"  
-
-# def get_word_page_webster(word):
-#     driver = webdriver.Chrome(options=options)
-
-#     try:
-#         driver.get("https://www.merriam-webster.com/")
-#         driver.set_window_position(0, 0)
-#         driver.set_window_size(957, 970)
-
-#         driver.implicitly_wait(10)
-#         search_box_container_home = driver.find_element('id', 'home-search-form')
-#         search_box_home = search_box_container_home.find_element('id', 'home-search-term')
-#         search_box_home.click()
-
-#         driver.implicitly_wait(15)
-
-#         search_box_container = driver.find_element('id', 'search-form')
-#         search_box = search_box_container.find_element('id', 'search-term')
-#         search_box.send_keys(word)
-
-#         search_button = search_box_container.find_element('id', 'search-form-submit-btn')
-#         search_button.click()
-
-#         driver.implicitly_wait(15)
-
-#         url = driver.current_url
-
-#         return url  
-#     finally: 
-#         driver.close()
-        # driver.quit()
-# user_agents = [
-#     # Chrome - macOS
-#     "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
-#     # Safari - macOS
-#     "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15",
-#     # Chrome - Linux
-#     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
-
-# ]
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
@@ -309,361 +268,900 @@ async def get_word_page_collins_pw(p: Playwright, word_obj):
 
 # async def get_definitions(url: str, session) -> object:
 # async def get_definitions(html_data, session) -> object:
-async def get_definitions(word_obj, session) -> object:
-    url = f"https://www.merriam-webster.com/dictionary/{word_obj['word']}"
-    # print(word_obj['word'])
-    async with session.get(url) as response:
-        html_data = await response.text()
+async def get_definitions(word_obj, session, sem) -> object:
+    print('get_definition triggered')
+    async with sem:
+        try:
+            url = f"https://www.merriam-webster.com/dictionary/{word_obj['word']}"
 
-    soup = BeautifulSoup(html_data, 'html.parser')
-
-    not_found_err = soup.find('p', class_='spelling-suggestion-text')
-    not_found_entries = soup.find('p', class_='partial-match-blurb')
-    if not_found_err:
-        word_obj['error'] = '404: Not Found'
-        # print('djfdhsk')
-        return word_obj
-    if not_found_entries:
-        word_obj['error'] = '401: Malformed Entry'
-        return word_obj
-    
-    try:
-
-        # return 'Found'
-        page_container = soup.find('div', 'left-content col position-relative overflow-hidden')
-
-        pos_data_entries = page_container.find_all('div', class_='entry-word-section-container')
-        # entry-word-section-container diff part of speech
-        # print(word)
-
-        # ex_sense = {
-        #     'definition': None,
-        #     'example': None
-        # }
-        # genreally ignore a subsense -> subsense
-
-        ex_object = {
-            "word": None,
-            "partOfSpeech": [],
-            "pronunciation": [],
-            # "senses": [],
-            # "senses": {},
-            "partOfSpeechSense": [],
-            "headWord": None,
-            "isLowFreq": True,
-            "isParentWord": False,
-            "error": None
-        }
-
-        for speech_idx, pos_data_entry in enumerate(pos_data_entries):
-            # print(speech_idx, 'speech index')
-
-            # Finding header data (Word, Part of Speech, Pronunciation)
-            header_entry = pos_data_entry.find('div', class_='row entry-header')  # CONTAINNG WORD AND PART OF SPEECH
-
-            ## Finding word (first index only)
-            if speech_idx == 0:
-                ex_object['word'] = header_entry.find('h1', class_='hword').text  # WORD
-                # print(word_obj['word'],ex_object['word'])
-
-            ## Finding part of speech
-            part_of_speech_container = header_entry.find('h2', class_='parts-of-speech')
-            part_of_speech = ''
-            if part_of_speech_container:
-                part_of_speech = header_entry.find('h2', class_='parts-of-speech').text  # PART OF SPEECH
-                ex_object['partOfSpeech'].append(part_of_speech)
-
-            if part_of_speech == '':
-                if len(ex_object['pronunciation']) == 0:
-                    word_obj['error'] = 'cav'
+            async with session.get(url) as response:
+                # response
+                # print(response.headers)
+                print(response.status)
+                if response.status == 404:
+                    word_obj['error'] = '404: Not Found'
                     return word_obj
+                if response.status == 401:
+                    word_obj['error'] = '401: Malformed Entry'
+                    return word_obj
+                if 399 < response.status and response.status < 500:
+                    word_obj['error'] = 403
+                    return word_obj
+                # print(str(response.text)[:400])
+                html_data = await response.text()
+
+            soup = BeautifulSoup(html_data, 'html.parser')
+
+            not_found_err = soup.find('p', class_='spelling-suggestion-text')
+            not_found_entries = soup.find('p', class_='partial-match-blurb')
+            if not_found_err:
+                word_obj['error'] = '404: Not Found'
+                return word_obj
+            if not_found_entries:
+                word_obj['error'] = '401: Malformed Entry'
+                return word_obj
+        
+        
+
+            page_container = soup.find('div', class_='main-container')
+            # page_container = soup.find('div', 'left-content col position-relative overflow-hidden')
+            
+
+            pos_data_entries = page_container.find_all('div', class_='entry-word-section-container')
+            
+
+            ex_object = {
+                "word": None,
+                "partsOfSpeech": [],
+                "pronunciation": [],
+                # "senses": [],
+                # "senses": {},
+                "partOfSpeechSense": [],
+                "headWord": None,
+                "isLowFreq": True,
+                "isParentWord": False,
+                "error": None
+            }
+
+            for speech_idx, pos_data_entry in enumerate(pos_data_entries):
+                print(speech_idx, 'speech index')
+      
+                # Finding header data (Word, Part of Speech, Pronunciation)
+                # header_entry = pos_data_entry.find('div', class_='row entry-header simple-definitions-header')  # CONTAINNG WORD AND PART OF SPEECH
+                header_entry = pos_data_entry.select_one('div.row.entry-header.simple-definitions-header')  # CONTAINNG WORD AND PART OF SPEECH
+                # header_entry = pos_data_entry.find('div', class_='row entry-header')  # CONTAINNG WORD AND PART OF SPEECH
+                # print(header_entry)
+                ## Finding word (first index only)
+                if speech_idx == 0:
+                    h1 = header_entry.find('h1', class_='hword')
+                    h1_text = h1.get_text()
+                    # print(h1.get_text(), 'h1')/
+                    # h1 = h1.get_text()
+                    # print(h1_text, 'syl')
+
+                    if is_string_null_or_empty(h1_text): raise Exception('Not Found')
+                    
+
+
+                    ex_object['word'] = h1_text  # WORD
+                    # ex_object['word'] = header_entry.find('h1', class_='hword').text  # WORD this was the original
+
+
+                ## Finding part of speech
+                part_of_speech_container = header_entry.find('h2', class_='parts-of-speech')
+                part_of_speech = ''
+                if part_of_speech_container:
+                    part_of_speech = header_entry.find('h2', class_='parts-of-speech').text  # PART OF SPEECH
+                    ex_object['partsOfSpeech'].append(part_of_speech)
+
+                if part_of_speech == '':
+                    if len(ex_object['pronunciation']) == 0:
+                        word_obj['error'] = 'cav'
+                        return word_obj
+                    else:
+                        continue
+            
+                
+                dir_pron = header_entry.find('a', class_='play-pron-v2')
+                if dir_pron:
+                    dir_pron_clean = dir_pron.get_text(" ", strip=True)
+                    dir_pron_clean = dir_pron_clean.replace("\xa0", " ").strip()
+                    ex_object['pronunciation'].append([dir_pron_clean])
                 else:
+                    ## Finding word pronounciation
+                    pronunciation = header_entry.find('span', class_='prons-entries-list-inline mb-1')  # PRONUNCIATION
+                    if pronunciation: 
+                        pronunciation_clean = pronunciation.get_text(" ", strip=True)
+                        pronunciation_clean = pronunciation_clean.replace("\xa0", " ").strip()
+                        # print(pronounciation_clean)
+                        ex_object['pronunciation'].append([pronunciation_clean])
+
+                ex_pos_sense = {
+                    f"pos:{part_of_speech}": []
+                }
+
+                pos_sense = {
+                    "partOfSpeech": part_of_speech,
+                    "posSenses": []
+                }
+
+                # Finding senses
+
+                ## Finding overall senses section # may need a list of vg, if necessaery
+                senses_sections = pos_data_entry.find_all('div', class_='vg')  # SENSES SECTION 
+
+                for sense_section_idx, senses_section in enumerate(senses_sections):
+                    ## Finding all sense containers
+                    sense_entry_containers = senses_section.find_all('div', class_='vg-sseq-entry-item')  # SENSE CONTAINERS
+                    # EACH BIG MEANING (SENSE)
+
+                    ex_senses = {
+                        'senses': []
+                    }
+                
+
+                    
+                    ## Iterating through sense/subsense containers
+                    for sense_container_idx, sense_container in enumerate(sense_entry_containers):
+                        # print(sense_container_idx+1)
+
+
+                        ### Finding subsense containers
+                        subsense_containers = sense_container.find_all('div', class_='sb-entry')  # SUBSENSE(S)
+
+                        ex_subsenses = {
+                            'subsenses': []
+                        }
+            
+                        # subsense_arr = []  # SUBSENSES ie, 
+                        # sense_arr = []  # SUBSENSES ie, 
+                        # print('curr vg-sseq-entry-item:', sense_container_idx)
+                        ### Iterating through subsense containers
+                        for subsense_container_idx, subsense_container in enumerate(subsense_containers):
+                            # print('curr sb idx:',subsense_container_idx)
+                            modifier = subsense_container.find('span', class_='sen has-num-only')
+                            if modifier:
+                                continue
+                            
+                            modifier_1 = subsense_container.find('span', class_='sen has-sn')
+                            if modifier_1:
+                                continue
+
+                    
+                            ex_sense = {
+                                'subsense': {'definition': None,
+                                            'example': None}
+                            }
+                
+                            #### Finding defintion container
+                            definition_container = subsense_container.find('span', class_='dt')
+                            # print('Anlyz:', subsense_container)
+                            #### Finding defintion
+                            defintion = definition_container.find('span', class_='dtText')
+                            if defintion:
+                                # some more cleaning needs to be done here, especially when it refrences another set of entries
+                                defintion_clean = get_formatted_definition_webster(definition_span=defintion, idx=sense_container_idx)
+                                # defintion_clean = defintion.text #
+                                # reference_start = '(see '
+                                # if reference_start in defintion_clean:
+                                #     defintion_clean = remove_definition_reference(defintion_clean)
+
+
+                                # # ex_sense['definition'] = defintion_clean
+                                # defintion_clean = defintion_clean[2:]
+                                ex_sense['subsense']['definition'] = defintion_clean
+
+                        
+                            #### Finding example
+                            example = subsense_container.find('div', class_='sub-content-thread mb-3')
+
+                            if example:
+                                example_clean = example.text.strip()
+                                ex_sense['subsense']['example'] = example_clean
+
+                            # print(ex_sense)
+                            ex_subsenses['subsenses'].append(ex_sense)
+
+
+                        # print(ex_senses['senses'])
+                        ex_senses['senses'].append(ex_subsenses)
+
+                    
+
+                    pos_sense['posSenses'].append(ex_senses) # keep this
+
+                ex_object['partOfSpeechSense'].append(pos_sense) # keep this
+
+        except Exception as e:
+            # print(f'Error parsing word {word_obj['word']}: {e}')
+            err_text = traceback.format_exc()
+            # print(f"Error parsing word {word_obj.get('word')}: {e}")
+            # print(err_text)               
+            word_obj['error'] = str(e)
+            word_obj['traceback'] = err_text
+            return word_obj
+
+        print(word_obj['word'])
+        print(ex_object['word'])
+
+        if not ex_object['word']:
+            word_obj['error'] = '404: Not Found'
+            return word_obj
+             
+
+
+        if word_obj['word'].lower() != ex_object['word'].lower():
+            headWord = ex_object['word']  # Word found
+            ex_object['word'] = word_obj['word']  # Word searched
+            ex_object['headWord'] = headWord  # Word found
+            
+
+
+        return ex_object
+    
+
+def get_formatted_definition_webster(definition_span, idx):
+    # testing with Joel, high, 
+    # determining if defnition has external references to extract
+    print('Sense #', idx)
+
+    definition_span_text = definition_span.get_text()
+
+
+    dx_jump = definition_span.find('span', class_='dx-jump')
+    if not dx_jump: 
+        definition_span_text = remove_see_colon_webster(definition_text=definition_span_text)
+        return definition_span_text[1:].strip()
+    
+
+    definition_text_cleaned = ''
+
+
+    for content in definition_span.contents:
+        if isinstance(content, Tag):
+            if content.name != 'a' and content.name != 'strong': continue
+            text = content.get_text()
+            if is_string_null_or_empty(text): continue
+            definition_text_cleaned += text
+        
+        if isinstance(content, NavigableString):
+            definition_text_cleaned += str(content)
+
+
+    definition_text_cleaned = remove_see_colon_webster(definition_text=definition_text_cleaned)
+    return definition_text_cleaned[1:].strip()
+
+def remove_see_colon_webster(definition_text):
+    target_index = definition_text.find('(see')
+    if target_index == -1: return definition_text
+
+    return definition_text[:target_index]
+    if '(see' not in definition_text: return definition_text
+
+    
+
+
+
+        
+
+
+
+    # return 'OKAY '
+
+
+    # definition_text = ''
+    # definition_text_array = []
+    # for c in definition_span.contents:
+    #     print(c)
+    #     if isinstance(c, NavigableString): return str(c)
+
+    #     if isinstance(c, Tag): 
+    #         if c.name == 'a':
+    #             a_text = c.get_text()
+    #             if is_string_null_or_empty(a_text): continue
+
+    #             definition_text += f'{a_text.strip()}'
+
+    #         # definition_text_array.append(str(c))
+    #     print('dkfjdlfjs')
+
+    # if '(see' in definition_text:
+    #     def_text_split = definition_text.split('(see')
+    #     definition_text = def_text_split[0].strip()
+
+    # return definition_text.strip()
+
+
+    
+
+
+
+
+    pass
+
+async def get_definitions_dictionary(word_obj, session, sem):
+    print('get_definitions_dictionary triggered')
+    url = f'https://www.dictionary.com/browse/{word_obj['word']}'
+    # getting an issues when sylbreak during dresent in h1
+    print(url)
+    async with sem:
+        async with session.get(url, allow_redirects=False) as response:
+            if response.status == 404:
+                word_obj['error'] = 'Not Found'
+                return word_obj # Not found
+            if response.status > 399 and response.status < 500:
+                word_obj['error'] = 403
+                return word_obj
+
+            html_data = await response.text()
+
+        soup = BeautifulSoup(html_data, 'html.parser')
+        try:
+            main_section = soup.find('main')
+            not_found = main_section.find('h1')
+            not_found_text = not_found.get_text()
+            not_found_string = f'no results found for {word_obj['word']}'
+            if not_found_string in not_found_text.lower(): raise Exception('Not found')
+            
+
+
+            word_section = main_section.find('section', class_='sec-item-entry-group')
+            if not word_section: raise Exception('Not found')
+
+            ex_object = {
+                "word": None,
+                "partsOfSpeech": [],
+                "pronunciation": [],
+                # "senses": [],
+                # "senses": {},
+                "partOfSpeechSense": [],
+                "headWord": None,
+                "isLowFreq": True,
+                "isParentWord": False,
+                "error": None
+            }
+
+            # (used without object) transative
+            # (used with object) transitive verb
+
+            word_pronunciation_box = word_section.find('div', class_='box-headword-audio-pronunciation')
+            if not word_pronunciation_box: raise Exception('Not found')
+
+            word_h1 = word_pronunciation_box.find('h1', class_='hdr-headword')  
+            if not word_h1: raise Exception('Not found')
+
+            word_h1_text = word_h1.get_text()
+            if not word_h1_text or len(word_h1_text) < 1: raise Exception('Not found')
+
+            word_h1_text = word_h1.get_text().strip().lower()
+
+            if word_obj['word'].lower() != word_h1_text:
+                ex_object['headWord'] = word_h1_text
+        
+            ex_object['word'] = word_obj['word']
+
+            # ex_object['word'] = word_h1_text.lower()
+
+            # pronunciation_box = word_pronunciation_box.find('div', class_='box-headword-audio-pronunciation')
+            ex_object['pronunciation'] = get_pronunciation_dictionary(pronunciation_box=word_pronunciation_box)
+
+            pos_sense_boxes = word_section.find_all('div', class_='box-posb')
+            if not pos_sense_boxes: raise Exception('Not found')
+            
+            # for parts of speech with multiple senses
+            # multiple_sesne = set()
+            # multiple_sesne_visited = set()
+            multiple_forms = set()
+            multiple_forms_visited = set()
+
+            # checking if a part of speech has multiple senses
+            for pos_sense_box in pos_sense_boxes:
+                # obtain pos for the entry
+                pos_label_text = get_pos_label_text_dictionary(pos_sense_box)
+
+                if not pos_label_text: continue
+                
+                if pos_label_text in ex_object['partsOfSpeech']:
+                    multiple_forms.add(pos_label_text)
+                else:
+                    ex_object['partsOfSpeech'].append(pos_label_text)
+
+            # Structuring pos sense array
+            for pos_sense_box in pos_sense_boxes:
+                pos_label_text = get_pos_label_text_dictionary(pos_sense_box)
+
+                if not pos_label_text: continue
+
+                print(pos_label_text, ex_object['partOfSpeechSense'])
+                if pos_label_text in multiple_forms_visited: continue
+                # confirmed there IS a "part of speech" that should have at least one unvisited form
+                pos_sense = {
+                        "partOfSpeech": pos_label_text,
+                        "posSenses": []
+                }
+
+                senses = {
+                    "senses": []
+                }
+                
+                if pos_label_text in multiple_forms:
+                    # "part of speech" containing multiple forms
+                    # -> list or None
+                    forms = get_forms_dictionary(pos_sense_boxes=pos_sense_boxes, part_of_speech=pos_label_text)
+                    
+                    if not forms: continue
+
+                    multiple_forms_visited.add(pos_label_text)
+                    
+                    # will this end in an append to "partofspeechsense"
+                    pos_sense['posSenses'] = forms  # posSenses == forms
+                    ex_object['partOfSpeechSense'].append(pos_sense)
                     continue
         
-            
-            dir_pron = header_entry.find('a', class_='play-pron-v2')
-            if dir_pron:
-                dir_pron_clean = dir_pron.get_text(" ", strip=True)
-                dir_pron_clean = dir_pron_clean.replace("\xa0", " ").strip()
-                ex_object['pronunciation'].append([dir_pron_clean])
-            else:
-                ## Finding word pronounciation
-                pronunciation = header_entry.find('span', class_='prons-entries-list-inline mb-1')  # PRONUNCIATION
-                if pronunciation: 
-                    pronunciation_clean = pronunciation.get_text(" ", strip=True)
-                    pronunciation_clean = pronunciation_clean.replace("\xa0", " ").strip()
-                    # print(pronounciation_clean)
-                    ex_object['pronunciation'].append([pronunciation_clean])
 
-            ex_pos_sense = {
-                f"pos:{part_of_speech}": []
+                # individual 'subsense' definitions
+                subsense_containers = pos_sense_box.select('ol.list-definition > li.item-definition')
+                if not subsense_containers: continue
+
+
+                # populating subsenses
+                # for subsense_item in subsense_items:
+                for subsense_container in subsense_containers:
+                    subsenses = {  
+                        "subsenses": []  ## subsense lists
+                    }
+
+                    subsense_list = get_subsense_list_dictionary(subsense_container)
+
+                    if not subsense_list: continue
+
+                    subsenses['subsenses'] = subsense_list
+
+                   
+
+                    senses['senses'].append(subsenses)
+
+                pos_sense['posSenses'].append(senses)
+
+                ex_object['partOfSpeechSense'].append(pos_sense)
+
+
+
+
+                    # subsense = {
+                    #     "definition": None,
+                    #     "example": None
+                    # }   
+                    # subsense_p = subsense_item.find('p', class_='txt-variant-label-short')
+                    # if not subsense_p: continue
+                    # subsense_p_text = subsense_p.get_text()
+                    # if is_string_null_or_empty(subsense_p_text): continue
+                    # subsense_p_text = subsense_p_text.strip()
+                    # subsense['definition'] = subsense_p_text
+                
+                    # blockquote_box = subsense_item.find('p')
+                    # if not blockquote_box:
+                    #     subsenses['subsenses'].append(subsense)
+                    #     continue
+                    # example_em = blockquote_box.select_one('em > p.txt-example')
+                    # if not example_em:
+                    #     subsenses['subsenses'].append(subsense)
+                    #     continue
+                    # example_em_text = example_em.get_text()
+                    # if is_string_null_or_empty(example_em_text):
+                    #     subsenses['subsenses'].append(subsense)
+                    #     continue
+                    # example_em_text = example_em_text.strip()
+                    # subsense['example'] = example_em_text
+
+                    # subsenses['subsenses'].append(subsense)
+
+            return ex_object
+        except Exception as e:
+            print(f'{word_obj['word']}: {e}')
+            # print(err_text)  
+            err_text = traceback.format_exc()
+            return word_obj
+
+
+def get_pronunciation_dictionary(pronunciation_box):
+    if not pronunciation_box:
+        return []
+    
+    pron_ipa_container = pronunciation_box.find('span', class_='txt-ipa')
+    if not pron_ipa_container: return []
+
+    pron_ipa_text = pron_ipa_container.get_text()
+    if not pron_ipa_text or len(pron_ipa_text) < 1: return []
+
+    pron_ipa_text = pron_ipa_text.strip()
+
+    if ',' not in pron_ipa_text: return [pron_ipa_text]
+
+
+    pron_arr = []
+    pron_ipa_text_split = pron_ipa_text.split(',')
+
+    for pron in pron_ipa_text_split:
+        pron_text = pron.strip()
+        if '/' in pron_text:
+            slash_index = pron_text.index('/')
+            if slash_index == 0: 
+                pron_arr.append(f'{pron_text[1:]}/')
+                continue
+            elif slash_index == len(pron_text) -1: 
+                pron_arr.append(f'/{pron_text[:len(pron_text)]}')
+                continue
+        
+        pron_arr.append(f'/{pron_text}/')
+    
+    print(pron_arr, 'dljfslfjsl')
+
+    return pron_arr
+
+# logic to get pos_label from dictionary.com entries
+def get_pos_label_text_dictionary(pos_sense_box):
+    pos_set = {
+        'noun', 'verb', 'adjective', 'adverb', 'pronoun',
+        'preposition', 'conjunction', 'interjection', 'determiner',
+        'article', 'participle', 'particle', 'numeral', 'postposition'
+    }
+
+    pos_label = pos_sense_box.find('h2')
+    if not pos_label: return None
+    pos_label_text = pos_label.get_text()
+    if is_string_null_or_empty(pos_label_text): return None
+
+    pos_label_text = pos_label_text.lower().strip()
+    if '(' in pos_label_text:
+        opening_colon_index = pos_label_text.index('(')
+        closing_colon_index = pos_label_text.index(')')
+        label_cleaned = ''
+        if opening_colon_index != 0:
+            label_cleaned = pos_label_text[:opening_colon_index].strip()
+        elif opening_colon_index == 0 and closing_colon_index == len(pos_label) - 1: return None
+
+        pos_label_text = label_cleaned
+        
+    if pos_label_text not in pos_set: return None
+
+    return pos_label_text
+
+
+def get_forms_dictionary(pos_sense_boxes, part_of_speech):
+    # senses / forms added to pos_sense['posSenses']
+    forms = []
+    
+
+
+    form_boxes = []
+
+    for pos_sense_box in pos_sense_boxes:
+        pos_label_text = get_pos_label_text_dictionary(pos_sense_box)
+
+        if pos_label_text != part_of_speech: continue
+
+        form_boxes.append(pos_sense_box)
+    
+    if len(form_boxes) < 1: return None
+
+    print('adjfkas;jkfsa;jdfsldk')
+    for form_box in form_boxes:
+        senses = {
+            "senses": []
+        }
+
+        subsense_containers = form_box.select('ol.list-definition > li.item-definition')
+        if not subsense_containers: continue
+    
+        for subsense_container in subsense_containers:
+            subsenses = {  
+                "subsenses": []  ## subsense lists
+            }
+
+            subsense_list = get_subsense_list_dictionary(subsense_container)
+
+            if not subsense_list: continue
+
+            subsenses['subsenses'] = subsense_list
+
+
+            senses['senses'].append(subsenses)
+        
+        forms.append(senses)
+
+    if len(forms) < 1: return None
+
+    return forms
+
+
+
+
+
+
+    pass
+
+# def get_subsense_lists_dictionary(subsense_items):
+def get_subsense_list_dictionary(subsense_container):
+    subsense_list = []
+
+    
+    # will have to determine if there is a single, or multiple subsenses
+    # will either be subsense_item, or subsense_items             
+    subsense_container_lis = subsense_container.select('ol.list-sub-definition > li.item-sub-definition')
+    if len(subsense_container_lis) < 1:
+        subsense_item = get_subsense_dictionary(subsense_container=subsense_container)
+        if not subsense_item: return None
+
+        subsense_list.append(subsense_item)
+        return subsense_list
+    
+    for subsense_container_li in subsense_container_lis:
+        subsense_item = get_subsense_dictionary(subsense_container=subsense_container_li)
+        if not subsense_item: continue
+
+        subsense_list.append(subsense_item)
+
+    if len(subsense_list) < 1: return None
+
+
+    return subsense_list
+
+
+# input should be an li
+def get_subsense_dictionary(subsense_container): 
+    subsense = {
+        "definition": None,
+        "example": None
+    } 
+
+
+
+
+    subsense_p = subsense_container.find('p', class_='txt-variant-label-short')
+    if not subsense_p: return None
+    
+    subsense_p_text = subsense_p.get_text()
+    if is_string_null_or_empty(subsense_p_text): return None
+
+
+    subsense_p_text = subsense_p_text.strip()
+    subsense['definition'] = subsense_p_text
+
+
+    blockquote_box = subsense_container.find('blockquote')
+    if not blockquote_box: return subsense
+
+    example_em = blockquote_box.select_one('em > p.txt-example')
+    if not example_em: return subsense
+
+    example_em_text = example_em.get_text()
+    if is_string_null_or_empty(example_em_text): return subsense
+
+    example_em_text = example_em_text.strip()
+    subsense['example'] = example_em_text
+
+    return subsense
+
+
+
+
+async def get_definitions_dictionary_(word_obj, session, sem):
+    # happy
+    url = f'https://www.dictionary.com/browse/{word_obj['word']}'
+    print(url)
+    async with sem:
+        async with session.get(url) as response:
+            html_data = await response.text()
+
+
+        soup = BeautifulSoup(html_data, 'html.parser')
+        try:
+            main_section = soup.find('main')
+            not_found = main_section.find('span', class_='hp91nlVaykGzCu7JxmyY')
+            if not_found:
+                raise Exception('Not found')
+                
+
+            word_section = main_section.find('div', id=re.compile(r'^dictionary-entry-'))
+
+            print(word_section)
+            word_container = word_section.find('div', class_='bZjAAKVoBi7vttR0xUts')
+            word = word_container.find('h1').text
+
+            pronunciation_container = word_section.find('div', class_='aB40zqNSml1nCbUuOh7V')
+            pronunciation = pronunciation_container.find('p').find('span').text
+
+            
+            part_of_speech_container = main_section.find('div', class_='S3nX0leWTGgcyInfTEbW')
+
+            part_of_speech_raw = part_of_speech_container.find('h2').text
+            if '(' in part_of_speech_raw:
+                if part_of_speech_raw[0] == '(':
+                    pos_split = part_of_speech_raw.split(')')
+                    pos_join = pos_split[-1].strip()
+                    part_of_speech = pos_join
+                else:
+                    pos_split = part_of_speech_raw.split('(')
+                    pos_join = pos_split[0].strip()
+                    part_of_speech = pos_join
+            else:
+                part_of_speech = part_of_speech_raw
+
+            meta_container = part_of_speech_container.find('div', class_='JCaD6kbRs6iNqMfskUMc')
+            meta = ''
+            if meta_container:
+                meta = meta_container.text
+            definitons_container = word_section.find("ol", class_='t5mJ11S_WhGnhaUCbL5g wRxb9i_TOKzQ15D2tIVD')
+            defintion = ''
+            if definitons_container:
+                defintion = definitons_container.find('li').text
+
+            if defintion == '':
+                raise Exception('Not found')
+            
+            ex_object = {
+                "word": None,
+                "partsOfSpeech": [],
+                "pronunciation": [],
+                # "senses": [],
+                # "senses": {},
+                "partOfSpeechSense": [],
+                "headWord": None,
+                "isLowFreq": True,
+                "isParentWord": False,
+                "error": None
+            }
+            # print(ex_object)
+            
+            if meta != '':
+                defintion = f'{meta} : {defintion}'
+            
+            senses = {
+                'senses': []
             }
 
             pos_sense = {
-                "partOfSpeech": part_of_speech,
-                "posSenses": []
+                    "partOfSpeech": part_of_speech,
+                    "posSenses": []
             }
 
-            # Finding senses
-
-            ## Finding overall senses section # may need a list of vg, if necessaery
-            senses_sections = pos_data_entry.find_all('div', class_='vg')  # SENSES SECTION 
-
-            for sense_section_idx, senses_section in enumerate(senses_sections):
-                ## Finding all sense containers
-                sense_entry_containers = senses_section.find_all('div', class_='vg-sseq-entry-item')  # SENSE CONTAINERS
-                # EACH BIG MEANING (SENSE)
-                # print(senses_section)
-                # senses = []
-                ex_senses = {
-                    'senses': []
+            subsesnse = {
+                'subsense': {
+                    'defintion': f'{defintion.strip()}',
+                    'example': None
                 }
-                # senses = []
-
-                
-                ## Iterating through sense/subsense containers
-                for sense_container_idx, sense_container in enumerate(sense_entry_containers):
-                    # print(sense_container_idx+1)
-
-
-                    ### Finding subsense containers
-                    subsense_containers = sense_container.find_all('div', class_='sb-entry')  # SUBSENSE(S)
-
-                    ex_subsenses = {
-                        'subsenses': []
-                    }
-        
-                    # subsense_arr = []  # SUBSENSES ie, 
-                    # sense_arr = []  # SUBSENSES ie, 
-                    # print('curr vg-sseq-entry-item:', sense_container_idx)
-                    ### Iterating through subsense containers
-                    for subsense_container_idx, subsense_container in enumerate(subsense_containers):
-                        # print('curr sb idx:',subsense_container_idx)
-                        modifier = subsense_container.find('span', class_='sen has-num-only')
-                        if modifier:
-                            continue
-                        
-                        modifier_1 = subsense_container.find('span', class_='sen has-sn')
-                        if modifier_1:
-                            continue
-
-                   
-                        ex_sense = {
-                            'subsense': {'definition': None,
-                                        'example': None}
-                        }
-            
-                        #### Finding defintion container
-                        definition_container = subsense_container.find('span', class_='dt')
-                        # print('Anlyz:', subsense_container)
-                        #### Finding defintion
-                        defintion = definition_container.find('span', class_='dtText')
-                        if defintion:
-                            # some more cleaning needs to be done here, especially when it refrences another set of entries
-                            defintion_clean = defintion.text #
-                            reference_start = '(see '
-                            if reference_start in defintion_clean:
-                                defintion_clean = remove_definition_reference(defintion_clean)
-
-
-                            # ex_sense['definition'] = defintion_clean
-                            ex_sense['subsense']['definition'] = defintion_clean
-
-                       
-                        #### Finding example
-                        example = subsense_container.find('div', class_='sub-content-thread mb-3')
-
-                        if example:
-                            example_clean = example.text.strip()
-                            ex_sense['subsense']['example'] = example_clean
-
-                        # print(ex_sense)
-                        ex_subsenses['subsenses'].append(ex_sense)
-
-
-                    # print(ex_senses['senses'])
-                    ex_senses['senses'].append(ex_subsenses)
-
-                  
-
-                pos_sense['posSenses'].append(ex_senses) # keep this
-
-            ex_object['partOfSpeechSense'].append(pos_sense) # keep this
-
-    except Exception as e:
-        # print(f'Error parsing word {word_obj['word']}: {e}')
-        err_text = traceback.format_exc()
-        # print(f"Error parsing word {word_obj.get('word')}: {e}")
-        # print(err_text)               
-        word_obj['error'] = str(e)
-        word_obj['traceback'] = err_text
-        return word_obj
-
-
-
-
-
-
-
-
-        # Subsenses
-        # syl_pron_container = header_entry.find('div', class_='row entry-attr mb-3 mt-2')  # SYLLABLE PRONOUNCIATION CONTAIENR
-        # if syl_pron_container:
-        #     word_syllable_repr = ''
-        #     if syl_pron_container.find('span', class_='word-syllables-entry'):  
-        #         word_syllable_repr = syl_pron_container.find('span', class_='word-syllables-entry').text  # WORD'S SYLLABLE REPRESENTION 
-        #     word_pronounciation = syl_pron_container.find_all('span', class_='prons-entries-list-inline mb-1')  # WORD PRONOUNCIATION REPRESNETION // MAY BE A LIST
-        ############
-
-        # # definition_sense_container = pos_data_entry.find('div', class_='vg-sseq-entry-item')  # SENSE ENTRY
-        # definition_sense_containers = definitions_container.find_all('div', class_='vg-sseq-entry-item')  # SENSE ENTRY
-
-        # for i, definition_sense_container in enumerate(definition_sense_containers):
-
-        #     definition_subsense_containers = definition_sense_container.find_all('div', class_='sb-entry')  # LIST OF SUBSENSE CONTAINERS
-
-        #     for idx, definition_subsense_container in enumerate(definition_subsense_containers):
-        #         definition_text = definition_subsense_container.find('span', class_='dtText')  # DEFINITION TEXT
-        #         if definition_text:
-        #             print(f'{idx + 1} Definition', definition_text.text)
-
-        #         examples = definition_subsense_container.find_all('div', class_='sub-content-thread mb-3')  # ASSOCIATED EXAMPLE(S) IF ANY
-        #         if len(examples) > 0:
-        #             for example in examples:
-        #                 print('Examples:', example.text)
-
-        #     print('-------------------')
-
-    if word_obj['word'].lower() != ex_object['word'].lower():
-        headWord = ex_object['word']  # Word found
-        ex_object['word'] = word_obj['word']  # Word searched
-        ex_object['headWord'] = headWord  # Word found
-
-
-    # print(ex_object)
-
-    return ex_object
-
-async def get_definitions_dictionary(word_obj, session):
-    # happy
-    url = f'https://www.dictionary.com/browse/{word_obj['word']}'
-    async with session.get(url) as response:
-        html_data = await response.text()
-
-
-    soup = BeautifulSoup(html_data, 'html.parser')
-    try:
-        main_section = soup.find('main')
-
-        not_found = main_section.find('span', class_='hp91nlVaykGzCu7JxmyY')
-        if not_found:
-            raise Exception('Not found')
-            
-
-        word_section = main_section.find('div', id=re.compile(r'^dictionary-entry-'))
-
-        word_container = word_section.find('div', class_='bZjAAKVoBi7vttR0xUts')
-        word = word_container.find('h1').text
-
-        pronunciation_container = word_section.find('div', class_='aB40zqNSml1nCbUuOh7V')
-        pronunciation = pronunciation_container.find('p').find('span').text
-
-        
-        part_of_speech_container = main_section.find('div', class_='S3nX0leWTGgcyInfTEbW')
-
-        part_of_speech_raw = part_of_speech_container.find('h2').text
-        if '(' in part_of_speech_raw:
-            if part_of_speech_raw[0] == '(':
-                pos_split = part_of_speech_raw.split(')')
-                pos_join = pos_split[-1].strip()
-                part_of_speech = pos_join
-            else:
-                pos_split = part_of_speech_raw.split('(')
-                pos_join = pos_split[0].strip()
-                part_of_speech = pos_join
-        else:
-            part_of_speech = part_of_speech_raw
-
-        meta_container = part_of_speech_container.find('div', class_='JCaD6kbRs6iNqMfskUMc')
-        meta = ''
-        if meta_container:
-            meta = meta_container.text
-        definitons_container = word_section.find("ol", class_='t5mJ11S_WhGnhaUCbL5g wRxb9i_TOKzQ15D2tIVD')
-        defintion = ''
-        if definitons_container:
-            defintion = definitons_container.find('li').text
-
-        if defintion == '':
-            raise Exception('Not found')
-        
-        ex_object = {
-            "word": None,
-            "partOfSpeech": [],
-            "pronunciation": [],
-            # "senses": [],
-            # "senses": {},
-            "partOfSpeechSense": [],
-            "headWord": None,
-            "isLowFreq": True,
-            "isParentWord": False,
-            "error": None
-        }
-        # print(ex_object)
-        
-        if meta != '':
-            defintion = f'{meta} : {defintion}'
-        
-        senses = {
-            'senses': []
-        }
-
-        pos_sense = {
-                "partOfSpeech": part_of_speech,
-                "posSenses": []
-        }
-
-        subsesnse = {
-            'subsense': {
-                'defintion': f': {defintion.strip()}',
-                'example': None
             }
-        }
-        # print(ex_object)
+            # print(ex_object)
 
-        senses['senses'].append(subsesnse)
-        # print(senses, 'djjdj')
+            senses['senses'].append(subsesnse)
+            # print(senses, 'djjdj')
 
-        pos_sense['posSenses'].append(senses)
+            pos_sense['posSenses'].append(senses)
 
-        ex_object['partOfSpeechSense'].append(pos_sense)
+            ex_object['partOfSpeechSense'].append(pos_sense)
+            
+
+            ex_object['partsOfSpeech'].append(part_of_speech)
+            ex_object['pronunciation'].append([pronunciation])
+
+
+            # word_test = [l for l in word if l.isalpha()]
+            # word_prop_test = [l for l in word_prop if l.isalpha()]
+
+
+            if word_obj['word'] != word:
+                ex_object['headWord'] = word
         
+            ex_object['word'] = word_obj['word']
 
-        ex_object['partOfSpeech'].append(part_of_speech)
-        ex_object['pronunciation'].append([pronunciation])
+            
+            # print(ex_object)
+            return ex_object
+        except Exception as e:
+            # print(f'{word_obj['word']}: {e}')
+            err_text = traceback.format_exc()
+            return word_obj
+            print(err_text)    
+
+        # sad path
 
 
-        # word_test = [l for l in word if l.isalpha()]
-        # word_prop_test = [l for l in word_prop if l.isalpha()]
+async def get_definitions_websters_loop_entry(freq_words, session, webster_sem):
+    words = freq_words
+    defintion_objs = []
+    i = 0
+    while len(words) > 0:
+        print('loop #', i)
+        success_words, blocked_words = await get_definitions_websters_loop(freq_words=words, session=session, webster_sem=webster_sem)
+
+        if len(success_words) > 0: defintion_objs.extend(success_words)
+        
+        if len(blocked_words) > 0: await asyncio.sleep(15)
+
+        words = blocked_words
+        i += 1
+
+    print(defintion_objs)
+
+    return defintion_objs
 
 
-        if word_obj['word'] != word:
-            ex_object['headWord'] = word
+async def get_definitions_websters_loop(freq_words, session, webster_sem):
+    words = []
+    missed = []
+
     
-        ex_object['word'] = word_obj['word']
-
-        # print('djd')
-        # print(ex_object)
-        return ex_object
-    except Exception as e:
-        # print(f'{word_obj['word']}: {e}')
-        err_text = traceback.format_exc()
-        return word_obj
-        print(err_text)    
-
-    # sad path
+    defintion_tasks = [get_definitions(word, session, webster_sem) for word in freq_words]
+    defintion_objs = await asyncio.gather(*defintion_tasks, return_exceptions=False)
 
 
-async def get_definitions_datamuse(word_obj, session):
+    for word in defintion_objs:
+        error = word.get('error')
+        if error:
+            if error == 403: missed.append(word)
+            else: words.append(word)
+            continue
+        words.append(word)
+
+    return words, missed 
+    
+
+async def fetch_datamuse_retries(word_obj, session):
+    if word_obj['word'][-2:] == "'s":
+            word = word_obj['word'][:-2]
+            url = f'https://api.datamuse.com/words?sp={word}&md=dfr&ipa=1&max=5'
+    else:
+        url = f'https://api.datamuse.com/words?sp={word_obj['word']}&md=dfr&ipa=1&max=5'
+    timeout = aiohttp.ClientTimeout(total=30, connect=10)
+    # data = None
+    for i in range(100):
+        async with session.get(url, timeout=timeout) as response:
+            
+            # print(response.status)
+            if response.status < 200 or response.status < 299: 
+                await asyncio.sleep(45)
+                continue
+            return await response.json()
+    
+async def get_definitions_datamuse_loop_entry(word_objs, session):
+    words = word_objs
+    defintion_objs = []
+    i = 0
+    while len(words) > 0:
+        print('loop #', i)
+        print(f'{len(defintion_objs)}/{len(word_objs)}')
+        success_words, blocked_words = await get_definitions_datamuse_loop(words_objs=words, session=session)
+
+        if len(success_words) > 0: defintion_objs.extend(success_words)
+
+        if len(blocked_words) > 0: await asyncio.sleep(90)
+
+        words = blocked_words
+        i += 1
+
+
+    return defintion_objs
+
+async def get_definitions_datamuse_loop(words_objs, session):
+    words = []
+    missed = []
+
+    defintion_tasks = [get_definitions_datamuse(word, session, datamuse_sem) for word in words_objs]
+    defintion_objs = await asyncio.gather(*defintion_tasks, return_exceptions=False)
+
+    for word in defintion_objs:
+        error = word.get('error')
+        if error:
+            if error == 403: missed.append(word)
+            else: words.append(word)
+            continue
+        words.append(word)
+
+    return words, missed
+
+async def get_definitions_datamuse(word_obj, session, sem):
+    print('get_definitions_datamuse triggered')
     # url = f'https://api.datamuse.com/words?sp={word_obj['word']}&md=dfp&ipa=1&max=5'
 
 
@@ -672,147 +1170,160 @@ async def get_definitions_datamuse(word_obj, session):
     word = ''
     url = ''
     # print(['word'][-2])
-    if word_obj['word'][-2:] == "'s":
-        word = word_obj['word'][:-2]
-        url = f'https://api.datamuse.com/words?sp={word}&md=dfr&ipa=1&max=5'
-    else:
-        url = f'https://api.datamuse.com/words?sp={word_obj['word']}&md=dfr&ipa=1&max=5'
-    async with session.get(url) as response:
-        response = await response.json()
-     
-    # print(response[0]['tags'])
-
-    # if its the same, - special characters
-
-
-    if not isinstance(response, list):
-        if word == '':
-            return {'word':word_obj['word'], 'isLowFreq': True, 'error': '404: Not Found'}
+    async with sem:
+        if word_obj['word'][-2:] == "'s":
+            word = word_obj['word'][:-2]
+            url = f'https://api.datamuse.com/words?sp={word}&md=dfr&ipa=1&max=5'
         else:
+            url = f'https://api.datamuse.com/words?sp={word_obj['word']}&md=dfr&ipa=1&max=5'
+        # if word_obj['word'][-2:] == "'s":
+        #     word = word_obj['word'][:-2]
+        #     url = f'https://api.datamuse.com/words?sp={word}&md=dfr&ipa=1&max=5'
+        # else:
+        #     url = f'https://api.datamuse.com/words?sp={word_obj['word']}&md=dfr&ipa=1&max=5'
+        async with session.get(url) as response:
+            print(response.status)
+            if response.status == 403:
+                word_obj['error'] = 403
+                return word_obj
+            if response.status < 200 or response.status < 299: 
+                word_obj['error'] = '404: Not Found'
+                return word_obj
+            response = await response.json()
+        # response = await fetch_datamuse_retries(word_obj, session)
+        # print(response[0]['tags'])
+
+        # if its the same, - special characters
+
+
+        if not isinstance(response, list):
+            if word == '':
+                return {'word':word_obj['word'], 'isLowFreq': True, 'error': '404: Not Found'}
+            else:
+                return {'word':word_obj['word'], 'isLowFreq': True, 'error': '404: Not Found'}
+
+        
+        if len(response) < 1:
             return {'word':word_obj['word'], 'isLowFreq': True, 'error': '404: Not Found'}
 
-    
-    if len(response) < 1:
-        return {'word':word_obj['word'], 'isLowFreq': True, 'error': '404: Not Found'}
+        frequency = [tag[2:] for tag in response[0]['tags'] if tag[:2] == 'f:']
+        # print(float(frequency[0]), "fjj")
 
-    frequency = [tag[2:] for tag in response[0]['tags'] if tag[:2] == 'f:']
-    # print(float(frequency[0]), "fjj")
-
-    if float(frequency[0]) >= 4.8:
-        # print('ddkkd')
-        word_obj['isLowFreq'] = False
-        word_obj['error'] = None
-        word_obj['headWord'] = word
-        return word_obj
-
-    word_res = response[0]
-    if word == '':
-        word = word_obj['word']
-
-    word_prop = word_res['word']
-
-    word_test = [l for l in word if l.isalpha()]
-    word_prop_test = [l for l in word_prop if l.isalpha()]
-
-    if word_test != word_prop_test:
-        # print('Not the same', word_prop)
-        return {'word':word_obj['word'], 'isLowFreq': True, 'error': "401: Doesn't Match"}
-    
-    hw = word_res.get('defHeadword')
-    if hw:
-        head_word_res = word_res['defHeadword']
-        r = await get_definitions({'word': head_word_res}, session)
-        if r['error'] != None:
+        if float(frequency[0]) >= 4.8:
+            # print('ddkkd')
+            word_obj['isLowFreq'] = False
+            word_obj['error'] = None
+            word_obj['headWord'] = word
             return word_obj
-        else:
-            temp = r['word']
-            r['word'] = word_obj['word']
-            r['headWord'] = temp
-            return r
+
+        word_res = response[0]
+        if word == '':
+            word = word_obj['word']
+
+        word_prop = word_res['word']
+
+        word_test = [l for l in word if l.isalpha()]
+        word_prop_test = [l for l in word_prop if l.isalpha()]
+
+        if word_test != word_prop_test:
+            # print('Not the same', word_prop)
+            return {'word':word_obj['word'], 'isLowFreq': True, 'error': "401: Doesn't Match"}
+        
+        hw = word_res.get('defHeadword')
+        if hw:
+            head_word_res = word_res['defHeadword']
+            r = await get_definitions({'word': head_word_res}, session, webster_sem)
+            if r['error'] != None:
+                return word_obj
+            else:
+                temp = r['word']
+                r['word'] = word_obj['word']
+                r['headWord'] = temp
+                return r
 
 
-    defs = word_res.get('defs')
+        defs = word_res.get('defs')
 
-    if not defs:
-        # print('Not found', word_obj['word'])
-        return {'word':word_obj['word'], 'error': '404: Not Found'}
-    
+        if not defs:
+            # print('Not found', word_obj['word'])
+            return {'word':word_obj['word'], 'error': '404: Not Found'}
+        
 
 
-    ex_object = {
-        "word": None,
-        "partOfSpeech": [],
-        "pronunciation": [],
-        # "senses": [],
-        # "senses": {},
-        "partOfSpeechSense": [],
-        "headWord": None,
-        "isLowFreq": True,
-        "isParentWord": False,
-        "error": None
-    }
-    
-    pos_dict = {
-        'n': 'noun',
-        'v': 'verb',
-        'adj': 'adjective',
-        'adv': 'adverb'
-    }
-    try:
-        for d in defs:
-            def_split = d.split('\t')
-            part_of_speech = pos_dict[def_split[0]]
-            defintion = def_split[1]
+        ex_object = {
+            "word": None,
+            "partsOfSpeech": [],
+            "pronunciation": [],
+            # "senses": [],
+            # "senses": {},
+            "partOfSpeechSense": [],
+            "headWord": None,
+            "isLowFreq": True,
+            "isParentWord": False,
+            "error": None
+        }
+        
+        pos_dict = {
+            'n': 'noun',
+            'v': 'verb',
+            'adj': 'adjective',
+            'adv': 'adverb'
+        }
+        try:
+            for d in defs:
+                def_split = d.split('\t')
+                part_of_speech = pos_dict[def_split[0]]
+                defintion = def_split[1]
 
-            if part_of_speech not in ex_object['partOfSpeech']:
-                # print('check')
-                ex_object['partOfSpeech'].append(part_of_speech)
-                pos_sense = {
-                    "partOfSpeech": part_of_speech,
-                    "posSenses": []
+                if part_of_speech not in ex_object['partsOfSpeech']:
+                    # print('check')
+                    ex_object['partsOfSpeech'].append(part_of_speech)
+                    pos_sense = {
+                        "partOfSpeech": part_of_speech,
+                        "posSenses": []
+                    }
+                    # print(pos_sense)
+                    senses = {
+                        'senses': []
+                    }
+                    pos_sense['posSenses'].append(senses)
+                    # print(pos_sense)
+
+                    ex_object['partOfSpeechSense'].append(pos_sense)
+                
+
+                subsesnse = {
+                    'subsense': {
+                        'defintion': f'{defintion.strip()}',
+                        'example': None
+                    }
                 }
-                # print(pos_sense)
-                senses = {
-                    'senses': []
-                }
-                pos_sense['posSenses'].append(senses)
-                # print(pos_sense)
 
-                ex_object['partOfSpeechSense'].append(pos_sense)
+                pos_sense_arr = ex_object['partOfSpeechSense']
+                for pos_sense_obj in pos_sense_arr:
+                    if pos_sense_obj['partOfSpeech'] == part_of_speech:
+                        pos_sense_obj['posSenses'][0]['senses'].append(subsesnse)
             
+    
 
-            subsesnse = {
-                'subsense': {
-                    'defintion': f': {defintion.strip()}',
-                    'example': None
-                }
-            }
-
-            pos_sense_arr = ex_object['partOfSpeechSense']
-            for pos_sense_obj in pos_sense_arr:
-                if pos_sense_obj['partOfSpeech'] == part_of_speech:
-                    pos_sense_obj['posSenses'][0]['senses'].append(subsesnse)
-        
-  
-
-        ipa_start = 'ipa_pron:'
-        pronunciation = [tag[len(ipa_start):] for tag in response[0]['tags'] if tag[:len(ipa_start)] == ipa_start]
-        ex_object['pronunciation'].append([pronunciation[0]])
+            ipa_start = 'ipa_pron:'
+            pronunciation = [tag[len(ipa_start):] for tag in response[0]['tags'] if tag[:len(ipa_start)] == ipa_start]
+            ex_object['pronunciation'].append([pronunciation[0]])
 
 
 
-        # checking if original word is different from word from the response (aside from hyphens, spaces and other specail characters)
-        if word_obj['word'] != word_res['word']:
-            ex_object['headWord'] = word_res['word']
-        
-        ex_object['word'] = word_obj['word']
+            # checking if original word is different from word from the response (aside from hyphens, spaces and other specail characters)
+            if word_obj['word'] != word_res['word']:
+                ex_object['headWord'] = word_res['word']
+            
+            ex_object['word'] = word_obj['word']
 
-        # print(ex_object)
+            # print(ex_object)
 
-        return ex_object
-    except Exception as e:
-        # print(f'{word}:', e)
-        return {'word': word_obj['word'], 'error': 'parse error'}
+            return ex_object
+        except Exception as e:
+            # print(f'{word}:', e)
+            return {'word': word_obj['word'], 'error': 'parse error'}
 
 
 async def get_definitions_collins(word_obj, session):
@@ -862,7 +1373,7 @@ async def get_definitions_collins(word_obj, session):
     
     ex_object = {
         "word": None,
-        "partOfSpeech": [],
+        "partsOfSpeech": [],
         "pronunciation": [],
         # "senses": [],
         # "senses": {},
@@ -894,7 +1405,7 @@ async def get_definitions_collins(word_obj, session):
     if not part_of_speech:
         word_obj['error'] = '404: Not Found'
         return word_obj
-    ex_object['partOfSpeech'].appened(part_of_speech.text)
+    ex_object['partsOfSpeech'].appened(part_of_speech.text)
 
     sense = definitions_container.find('div', class_='def')
     if not sense:
@@ -906,7 +1417,7 @@ async def get_definitions_collins(word_obj, session):
         'posSenses': [
             {
                 'senses': [
-                    {'subsenses': [{'subsense': {'definition': f': {sense.text}', 'example': None}}, {'subsense': {'definition': ': to produce by or as if by incubation : hatch', 'example': None}}]}, 
+                    {'subsenses': [{'subsense': {'definition': f'{sense.text}', 'example': None}}, {'subsense': {'definition': ': to produce by or as if by incubation : hatch', 'example': None}}]}, 
                 ]
             },
         ]
@@ -921,290 +1432,319 @@ async def get_definitions_collins(word_obj, session):
     return ex_object
 
 
-async def get_definitions_wiktionary(word_obj, session):
+async def get_definitions_wiktionary(word_obj, session, sem):
+    print('get_definitions_wiktionary triggered')
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
     }
     url = f"https://en.wiktionary.org/wiki/{word_obj['word']}"
-    async with session.get(url, headers=headers) as response:
-        html_data = await response.text()
-        # print(response.status)
+    print(url)
+    async with sem:
+        try:
+            async with session.get(url, headers=headers) as response:
+                if response.status == 404:
+                    word_obj['error'] = 'Not Found'
+                    return word_obj # Not found
+                if response.status > 399 and response.status < 500:
+                    word_obj['error'] = 403
+                    return word_obj
 
-    soup = BeautifulSoup(html_data, 'html.parser')
-    # print(soup)
+                html_data = await response.text()
+                # print(response.status)
 
-    not_found_text = f'Wiktionary does not yet have an entry for {word_obj['word']}.'
-    not_found = soup.find(string=not_found_text)
-    if not_found:
-        # print('How')
-        word_obj['error'] = '404: Not Found'
-        return word_obj
-    # print('here', word_obj['word'])
+            soup = BeautifulSoup(html_data, 'html.parser')
+            # print(soup)
 
-    ex_object = {
-        "word": None,
-        "partOfSpeech": [],
-        "pronunciation": [],
-        # "senses": [],
-        # "senses": {},
-        "partOfSpeechSense": [],
-        "headWord": None,
-        "isLowFreq": True,
-        "isParentWord": False,
-        "error": None
-    }
+            not_found_text = f'Wiktionary does not yet have an entry for {word_obj['word']}.'
+            not_found = soup.find(string=not_found_text)
+            if not_found:
+                # print('How')
+                word_obj['error'] = '404: Not Found'
+                return word_obj
+            # print('here', word_obj['word'])
 
-    parts_of_speech_dict = {
-        'interjection':'interjection',
-        'conjunction':'conjunction',
-        'determiner':'determiner',
-        'adjective':'adjective',
-        'article':'article',
-        'adverb':'adverb',
-        'noun':'noun',
-        'postposition':'postposition',
-        'participle':'participle',
-        'particle':'particle',
-        'numeral':'numeral',
-        'number':'number',
-        'preposition':'preposition',
-        'proper noun':'noun',
-        'pronoun':'pronoun',
-        'verb':'verb'
-    }
-    # unpursuable
-    
-    main_container = soup.find('main', id='content')
-    if not main_container:
-        word_obj['error'] = '401: Parse Error'
-        return word_obj
+            ex_object = {
+                "word": None,
+                "partsOfSpeech": [],
+                "pronunciation": [],
+                # "senses": [],
+                # "senses": {},
+                "partOfSpeechSense": [],
+                "headWord": None,
+                "isLowFreq": True,
+                "isParentWord": False,
+                "error": None
+            }
 
-    # sad path
-    
+            parts_of_speech_dict = {
+                'interjection':'interjection',
+                'conjunction':'conjunction',
+                'determiner':'determiner',
+                'adjective':'adjective',
+                'article':'article',
+                'adverb':'adverb',
+                'noun':'noun',
+                'postposition':'postposition',
+                'participle':'participle',
+                'particle':'particle',
+                'numeral':'numeral',
+                'number':'number',
+                'preposition':'preposition',
+                'proper noun':'noun',
+                'pronoun':'pronoun',
+                'verb':'verb'
+            }
+            # unpursuable
+            
+            main_container = soup.find('main', id='content')
+            if not main_container:
+                word_obj['error'] = '401: Parse Error'
+                return word_obj
 
-    header_container = main_container.find('header', class_="mw-body-header vector-page-titlebar no-font-mode-scale")
-    if not header_container:
-        word_obj['error'] = '401: Parse Error'
-        return word_obj
-    header_text = header_container.find('span', class_="mw-page-title-main").text.lower()
-    word_obj['word'] = header_text
+            # sad path
+            
 
-    # print(header_text)
-    data_section_container = main_container.find('div', id="mw-content-text") 
-    if not data_section_container:
-        word_obj['error'] = '401: Parse Error'
-        return word_obj
-    
-    data_containers = data_section_container.find_all('div', class_='mw-heading')
-    
-    # Iterate through data containers to find necessary data in neigboring containers (h3.pronunciation -> pronunciation text, h3.partOfSpeech -> senses)
-    for data_container in data_containers:
-        language_heading = data_container.find('h2')
-        if language_heading:
-            # if 'english' not in language_heading.text.lower() and 'transligual' not in language_heading.text.lower():
-            if 'translingual' != language_heading.text.lower().strip() and 'english' != language_heading.text.lower().strip():
-                # print(language_heading.text, 'djdj')
-                # print(language_heading.text.lower(), 'transligual' not in language_heading.text.lower())
-                break
+            header_container = main_container.find('header', class_="mw-body-header vector-page-titlebar no-font-mode-scale")
+            if not header_container:
+                word_obj['error'] = '401: Parse Error'
+                return word_obj
+            h1 = header_container.find('h1', class_="firstHeading mw-first-heading")
+            if not h1: 
+                word_obj['error'] = '404: Not Found'
+                return word_obj
+            
+            h1_text = h1.get_text()
+            if not h1_text: 
+                word_obj['error'] = '404: Not Found'
+                return word_obj
 
-        container_title = data_container.find('h3')
-        if not container_title:
-            continue
-        container_title_text = container_title.text.lower().strip()
-        if container_title_text == 'pronunciation':
-            pronunciations_container = data_container.find_next('ul')
-            if not pronunciations_container:
-                continue
-            pron_lis = pronunciations_container.find_all('li')
-            for pron_li in pron_lis:
-                if 'ipa' in pron_li.text.lower():
-                    pron_li_split = pron_li.text.lower().split('ipa(key):')
-                    pronunciation = pron_li_split[-1].strip().strip('/[]')
-                    # print(pronunciation, '*')
-                    ex_object['pronunciation'] = [pronunciation]
+            h1_text = h1_text.strip().lower()
+            word_obj['word'] = h1_text
 
-            pass
-            # print(container_title_text)
-            # 
-            # container_title_text.
-        elif container_title_text in parts_of_speech_dict:
-            ex_object['partOfSpeech'].append(parts_of_speech_dict[container_title_text])
-            definitions_container = data_container.find_next('ol')
-            if not definitions_container:
-                continue
-            definition_containers = definitions_container.find_all('li', recursive=False)
-            if not definition_containers:
-                continue
-            most_recent_pos = container_title_text
-            senses = parse_definitions_wiktionary(definition_containers, most_recent_pos)
-            if senses == 'error':
-                continue
-            ex_object['partOfSpeechSense'].append(senses)
-        
-        else:
-            continue
+            # print(header_text)
+            data_section_container = main_container.find('div', id="mw-content-text") 
+            if not data_section_container:
+                word_obj['error'] = '401: Parse Error'
+                return word_obj
+            
+            data_containers = data_section_container.find_all('div', class_='mw-heading')
+            
+            # Iterate through data containers to find necessary data in neigboring containers (h3.pronunciation -> pronunciation text, h3.partOfSpeech -> senses)
+            for data_container in data_containers:
+                language_heading = data_container.find('h2')
+                if language_heading:
+                    # if 'english' not in language_heading.text.lower() and 'transligual' not in language_heading.text.lower():
+                    if 'translingual' != language_heading.text.lower().strip() and 'english' != language_heading.text.lower().strip():
+                        # print(language_heading.text, 'djdj')
+                        # print(language_heading.text.lower(), 'transligual' not in language_heading.text.lower())
+                        break
 
-    if ex_object['word'] != word_obj['word']:
-        ex_object['headWord'] = ex_object['word']
-        ex_object['word'] = word_obj['word']
-    
+                container_title = data_container.find('h3')
+                if not container_title:
+                    continue
+                container_title_text = container_title.text.lower().strip()
+                if container_title_text == 'pronunciation':
+                    pronunciations_container = data_container.find_next('ul')
+                    if not pronunciations_container:
+                        continue
+                    pron_lis = pronunciations_container.find_all('li')
+                    for pron_li in pron_lis:
+                        if 'ipa' in pron_li.text.lower():
+                            pron_li_split = pron_li.text.lower().split('ipa(key):')
+                            pronunciation = pron_li_split[-1].strip().strip('/[]')
+                            # print(pronunciation, '*')
+                            ex_object['pronunciation'] = [pronunciation]
 
-    if len(ex_object['partOfSpeechSense']) < 1:
-        word_obj['error'] = '401: Parse Error'
-        return word_obj
-    
-    return ex_object
+                    pass
+                    # print(container_title_text)
+                    # 
+                    # container_title_text.
+                elif container_title_text in parts_of_speech_dict:
+                    ex_object['partsOfSpeech'].append(parts_of_speech_dict[container_title_text])
+                    definitions_container = data_container.find_next('ol')
+                    if not definitions_container:
+                        continue
+                    definition_containers = definitions_container.find_all('li', recursive=False)
+                    if not definition_containers:
+                        continue
+                    most_recent_pos = container_title_text
+                    senses = parse_definitions_wiktionary(definition_containers, most_recent_pos)
+                    if senses == 'error':
+                        continue
+                    ex_object['partOfSpeechSense'].append(senses)
+                
+                else:
+                    continue
 
-async def get_definitions_wiktionary_extra(word_obj, session):
+            if ex_object['word'] != word_obj['word']:
+                ex_object['headWord'] = ex_object['word']
+                ex_object['word'] = word_obj['word']
+            
+
+            if len(ex_object['partOfSpeechSense']) < 1:
+                word_obj['error'] = '401: Parse Error'
+                return word_obj
+            
+            return ex_object
+        except Exception as e:
+            err_text = traceback.format_exc()
+            # print(f"Error parsing word {word_obj.get('word')}: {e}")
+            # print(err_text)               
+            word_obj['error'] = str(e)
+            word_obj['traceback'] = err_text
+            return word_obj
+
+async def get_definitions_wiktionary_extra(word_obj, session, sem):
+    # print('get_definitions_wiktionary_extra triggered')
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
     }
-    url = f"https://en.wiktionary.org/wiki/{word_obj['word']}"
-    async with session.get(url, headers=headers) as response:
-        html_data = await response.text()
-        # print(response.status)
+    async with sem:
+        url = f"https://en.wiktionary.org/wiki/{word_obj['word']}"
+        async with session.get(url, headers=headers) as response:
+            html_data = await response.text()
+            # print(response.status)
 
-    soup = BeautifulSoup(html_data, 'html.parser')
-    # print(soup)
+        soup = BeautifulSoup(html_data, 'html.parser')
+        # print(soup)
 
-    not_found_text = f'Wiktionary does not yet have an entry for {word_obj['word']}.'
-    not_found = soup.find(string=not_found_text)
-    if not_found:
-        # print('How')
-        word_obj['error'] = '404: Not Found'
-        return word_obj
-    # print('here', word_obj['word'])
+        not_found_text = f'Wiktionary does not yet have an entry for {word_obj['word']}.'
+        not_found = soup.find(string=not_found_text)
+        if not_found:
+            # print('How')
+            word_obj['error'] = '404: Not Found'
+            return word_obj
+        # print('here', word_obj['word'])
 
-    ex_object = {
-        "word": None,
-        "partOfSpeech": [],
-        "pronunciation": [],
-        # "senses": [],
-        # "senses": {},
-        "partOfSpeechSense": [],
-        "headWord": None,
-        "isLowFreq": True,
-        "isParentWord": False,
-        "error": None
-    }
+        ex_object = {
+            "word": None,
+            "partsOfSpeech": [],
+            "pronunciation": [],
+            # "senses": [],
+            # "senses": {},
+            "partOfSpeechSense": [],
+            "headWord": None,
+            "isLowFreq": True,
+            "isParentWord": False,
+            "error": None
+        }
 
-    parts_of_speech_dict = {
-        'interjection':'interjection',
-        'conjunction':'conjunction',
-        'determiner':'determiner',
-        'adjective':'adjective',
-        'article':'article',
-        'adverb':'adverb',
-        'noun':'noun',
-        'postposition':'postposition',
-        'participle':'participle',
-        'particle':'particle',
-        'numeral':'numeral',
-        'number':'number',
-        'preposition':'preposition',
-        'proper noun':'noun',
-        'pronoun':'pronoun',
-        'verb':'verb'
-    }
-    # unpursuable
-    
-    main_container = soup.find('main', id='content')
-    if not main_container:
-        word_obj['error'] = '401: Parse Error'
-        return word_obj
-
-    # sad path
-    
-
-    header_container = main_container.find('header', class_="mw-body-header vector-page-titlebar no-font-mode-scale")
-    if not header_container:
-        word_obj['error'] = '401: Parse Error'
-        return word_obj
-    header_text = header_container.find('span', class_="mw-page-title-main").text.lower()
-
-    word_obj['word'] = header_text
-
-    data_section_container = main_container.find('div', id="mw-content-text") 
-    if not data_section_container:
-        word_obj['error'] = '401: Parse Error'
-        return word_obj
-    
-
-    data_containers = data_section_container.find_all('div', class_='mw-heading')
-    
-    # Iterate through data containers to find necessary data in neigboring containers (h3.pronunciation -> pronunciation text, h3.partOfSpeech -> senses)
-    for data_container in data_containers:
-        # language_heading = data_container.find('h2')
-        # if language_heading:
-        #     # if 'english' not in language_heading.text.lower() and 'transligual' not in language_heading.text.lower():
-        #     if 'translingual' != language_heading.text.lower().strip() and 'english' != language_heading.text.lower().strip():
-        #         # print(language_heading.text, 'djdj')
-        #         # print(language_heading.text.lower(), 'transligual' not in language_heading.text.lower())
-        #         break
-
-        container_title = data_container.find(['h3', 'h4'])
-        if not container_title:
-            continue
-        container_title_text = container_title.text.lower().strip()
-        if container_title_text == 'pronunciation':
-            pronunciations_container = data_container.find_next('ul')
-            if not pronunciations_container:
-                continue
-            pron_lis = pronunciations_container.find_all('li')
-            for pron_li in pron_lis:
-                if 'ipa' in pron_li.text.lower():
-                    pron_li_split = pron_li.text.lower().split('ipa(key):')
-                    pronunciation = pron_li_split[-1].strip().strip('/[]')
-                    # print(pronunciation, '*')
-                    ex_object['pronunciation'] = [pronunciation]
-                    # print(pron_li.text.lower())
-                    # print(pron_li_split)
-                    # print(pron_li_split[-1].strip())
-                    # print(len(pron_li_split))
-            # print(container_title_text)
-            # 
-            # container_title_text.
-        elif container_title_text in parts_of_speech_dict:
-            ex_object['partOfSpeech'].append(parts_of_speech_dict[container_title_text])
-            print('dj')
-            definitions_container = data_container.find_next('ol')
-          
-            if not definitions_container:
-                continue
-            definition_containers = definitions_container.find_all('li', recursive=False)
-            if not definition_containers:
-                continue
-            most_recent_pos = container_title_text
-            senses = parse_definitions_wiktionary(definition_containers, most_recent_pos)
-            if senses == 'error':
-                continue
-            ex_object['partOfSpeechSense'].append(senses)
+        parts_of_speech_dict = {
+            'interjection':'interjection',
+            'conjunction':'conjunction',
+            'determiner':'determiner',
+            'adjective':'adjective',
+            'article':'article',
+            'adverb':'adverb',
+            'noun':'noun',
+            'postposition':'postposition',
+            'participle':'participle',
+            'particle':'particle',
+            'numeral':'numeral',
+            'number':'number',
+            'preposition':'preposition',
+            'proper noun':'noun',
+            'pronoun':'pronoun',
+            'verb':'verb'
+        }
+        # unpursuable
         
-        else:
-            continue
+        main_container = soup.find('main', id='content')
+        if not main_container:
+            word_obj['error'] = '401: Parse Error'
+            return word_obj
 
-    if ex_object['word'] != word_obj['word']:
-        ex_object['headWord'] = ex_object['word']
-        ex_object['word'] = word_obj['word']
-    
+        # sad path
+        
 
-    if len(ex_object['partOfSpeechSense']) < 1:
-        word_obj['error'] = '401: Parse Error'
-        # print('fjfj')
-        return word_obj
+        header_container = main_container.find('header', class_="mw-body-header vector-page-titlebar no-font-mode-scale")
+        if not header_container:
+            word_obj['error'] = '401: Parse Error'
+            return word_obj
+        header = header_container.find('span', class_="mw-page-title-main")
+        if not header:
+            word_obj['error'] = '401: Parse Error'
+            return word_obj
+        header_text = header.get_text()
+        if is_string_null_or_empty(header_text):
+            word_obj['error'] = '401: Parse Error'
+            return word_obj
+        
+        header_text = header_text.lower()
 
-    return ex_object
-    
-    # parts_of_speech.append(h3.text.lower().split()) - continue
-    # if h3.text.lower().split() == 'pronunciation'
-    # get neigbooring ul > li span class_=ipa text
-    # if h3.text.lower().split() in pos' get newigboring / next ol
-    # the li text in the ol as senses, couild have multiple ol on the same level
-    # find
+        word_obj['word'] = header_text
 
-# /ˈæ͜ɑː.ren.del/
+        data_section_container = main_container.find('div', id="mw-content-text") 
+        if not data_section_container:
+            word_obj['error'] = '401: Parse Error'
+            return word_obj
+        
+
+        data_containers = data_section_container.find_all('div', class_='mw-heading')
+        
+        # Iterate through data containers to find necessary data in neigboring containers (h3.pronunciation -> pronunciation text, h3.partOfSpeech -> senses)
+        for data_container in data_containers:
+            # language_heading = data_container.find('h2')
+            # if language_heading:
+            #     # if 'english' not in language_heading.text.lower() and 'transligual' not in language_heading.text.lower():
+            #     if 'translingual' != language_heading.text.lower().strip() and 'english' != language_heading.text.lower().strip():
+            #         # print(language_heading.text, 'djdj')
+            #         # print(language_heading.text.lower(), 'transligual' not in language_heading.text.lower())
+            #         break
+
+            container_title = data_container.find(['h3', 'h4'])
+            if not container_title:
+                continue
+            container_title_text = container_title.text.lower().strip()
+            if container_title_text == 'pronunciation':
+                pronunciations_container = data_container.find_next('ul')
+                if not pronunciations_container:
+                    continue
+                pron_lis = pronunciations_container.find_all('li')
+                for pron_li in pron_lis:
+                    if 'ipa' in pron_li.text.lower():
+                        pron_li_split = pron_li.text.lower().split('ipa(key):')
+                        pronunciation = pron_li_split[-1].strip().strip('/[]')
+                        # print(pronunciation, '*')
+                        ex_object['pronunciation'] = [pronunciation]
+                        # print(pron_li.text.lower())
+                        # print(pron_li_split)
+                        # print(pron_li_split[-1].strip())
+                        # print(len(pron_li_split))
+                # print(container_title_text)
+                # 
+                # container_title_text.
+            elif container_title_text in parts_of_speech_dict:
+                ex_object['partsOfSpeech'].append(parts_of_speech_dict[container_title_text])
+                definitions_container = data_container.find_next('ol')
+            
+                if not definitions_container:
+                    continue
+                definition_containers = definitions_container.find_all('li', recursive=False)
+                if not definition_containers:
+                    continue
+                most_recent_pos = container_title_text
+                senses = parse_definitions_wiktionary(definition_containers, most_recent_pos)
+                if senses == 'error':
+                    continue
+                ex_object['partOfSpeechSense'].append(senses)
+            
+            else:
+                continue
+
+        if ex_object['word'] != word_obj['word']:
+            ex_object['headWord'] = ex_object['word']
+            ex_object['word'] = word_obj['word']
+        
+
+        if len(ex_object['partOfSpeechSense']) < 1:
+            word_obj['error'] = '401: Parse Error'
+            # print('fjfj')
+            return word_obj
+
+        return ex_object
     
 
     
@@ -1253,7 +1793,7 @@ def parse_definitions_wiktionary(definition_containers, pos):
             if example:
                 example_text = example.text
 
-            subsense_data = {'subsenses': [{'subsense': {'definition': f': {li_text[0]}', 'example': example_text}}]},                   
+            subsense_data = {'subsenses': [{'subsense': {'definition': f'{li_text[0]}', 'example': example_text}}]},                   
           
             pos_sense['posSenses'][0]['senses'].append(subsense_data)
             continue
@@ -1294,7 +1834,7 @@ def parse_definitions_wiktionary(definition_containers, pos):
 
             subsense = {
                 'subsense': 
-                    {'definition': f': {''.join(subsense_text).strip()}', 'example': example_text}
+                    {'definition': f'{''.join(subsense_text).strip()}', 'example': example_text}
                 
             }
             subsenses['subsenses'].append(subsense)
@@ -1303,66 +1843,96 @@ def parse_definitions_wiktionary(definition_containers, pos):
 
 
 
-            # print('Res:', ''.join(text))
-            # text = nested_li.text
-
-            # if ''.__contains__('Coordinate ')
-            # print('Nested li:', nested_li.text)
-            # print('Subsenses:', subsenses)
             break
-        # print(subsenses)
-        # pos_sense['posSenses']['senses'].append(subsenses)
+  
         pos_sense['posSenses'][-1]['senses'].append(subsenses)
-        # print(pos_sense)
-        break
     if len(pos_sense['posSenses']) < 1:
         return 'error'
-    
-    # if len(senses['senses'] > 1):
 
-    
     return pos_sense
     
-    
+
+async def get_dash_word_definitions_loop_entry(word_objs, session):
+    words = word_objs
+    defintion_objs = []
+    i = 0
+    while len(words) > 0:
+        print('loop #', i)
+        print(f'{len(defintion_objs)}/{len(word_objs)}')
+        success_words, blocked_words = await get_definitions_datamuse_loop(words_objs=words, session=session)
+
+        if len(success_words) > 0: defintion_objs.extend(success_words)
+
+        if len(blocked_words) > 0: await asyncio.sleep(90)
+
+        words = blocked_words
+        i += 1
+
+
+    return defintion_objs
+
+async def get_dash_word_definitions_loop_entry(words_objs, session):
+    words = []
+    missed = []
+
+    defintion_tasks = [get_dash_word_defintions(word, session, dash_sem) for word in words_objs]
+    defintion_objs = await asyncio.gather(*defintion_tasks, return_exceptions=False)
+
+    for word in defintion_objs:
+        error = word.get('error')
+        if error:
+            if error == 403: missed.append(word)
+            else: words.append(word)
+            continue
+        words.append(word)
+
+    return words, missed
     
 
  
 
 
-async def get_dash_word_defintions(word_obj, session):
+async def get_dash_word_defintions(word_obj, session, sem):
+    print('get_dash_word_defintions triggered')
     if '-' not in word_obj['word']:
         word_obj['error'] = '401: No dash'
         return [word_obj]
 
     parent_word = word_obj
+    parent_word["isLowFreq"] = False
     parent_word["isParentWord"] = True
     parent_word["error"] = None
 
-    # print(parent_word)
     word_split = word_obj['word'].split('-')
-    # print(parent_word)
-    # print('\n')
-    sub_words = []
-    sub_words.append(parent_word)
-    for w in word_split:
-        # print(w)
-        # async with session.get(url) as response:
-            # url = f'https://api.datamuse.com/words?sp={word_obj['word']}&md=dfr&ipa=1&max=5'
-        r = await get_definitions_datamuse({'word':w}, session)
-        sub_words.append(r)
+    async with sem:
+        # Iterate and add sub sections of compound word
+        sub_words = []
+        for w in word_split:
+            response = await get_definitions_datamuse({'word':w}, session, datamuse_sem)
+            is_lf = response.get('isLowFreq') 
+            if is_lf is not None:
+                if is_lf == True:
+                    parent_word['isLowFreq'] = True
+
+
+            sub_words.append(response)
+            
+        
+        sub_words.append(parent_word)
+
+
+
+    
         
 
-        # print(r, '\n')
-        # return r
-    
 
-
-    return sub_words
+        return sub_words
     
 
 
 
 async def get_eth_word_defintions(word_obj):
+    print('get_eth_word_defintions triggered')
     print(list(word_obj['word']))
     if word_obj['word'][-3:] != 'eth':
         return word_obj
@@ -1374,7 +1944,7 @@ async def get_eth_word_defintions(word_obj):
 
     ex_object = {
         "word": word_obj['word'],
-        "partOfSpeech": ['verb'],
+        "partsOfSpeech": ['verb'],
         "pronunciation": [],
         # "senses": [],
         # "senses": {},
@@ -1384,7 +1954,7 @@ async def get_eth_word_defintions(word_obj):
             'posSenses': [
                     {
                         'senses': [
-                            {'subsenses': [{'subsense': {'definition': f': Archaic. :  3rd person singular present indicative of {word}.', 'example': None}}]},                   
+                            {'subsenses': [{'subsense': {'definition': f'Archaic. :  3rd person singular present indicative of {word}.', 'example': None}}]},                   
                         ]
                     }, 
                 ],
@@ -1399,7 +1969,8 @@ async def get_eth_word_defintions(word_obj):
     return ex_object
 
 
-async def get_accent_word_definitions(word_obj, session):
+async def get_accent_word_definitions(word_obj, session, sem):
+    print('get_accent_word_definitions triggered')
     word = word_obj['word']
     accent_word = format_accent_charaters(word)
     if word == accent_word:
@@ -1416,16 +1987,19 @@ async def get_accent_word_definitions(word_obj, session):
         get_definitions_wiktionary_extra
     ]
 
-    for func in definition_functions:
-        accent_word_obj = await func(accent_word_obj, session)
-        if accent_word_obj.get('error') is None:
-            accent_word_obj['headWord'] = accent_word_obj['word']
-            accent_word_obj['word'] = word
-            return accent_word_obj
+    async with sem:
+
+        for func in definition_functions:
+            accent_word_obj = await func(accent_word_obj, session, accent_sem)
+            if accent_word_obj.get('error') is None:
+                accent_word_obj['headWord'] = accent_word_obj['word']
+                accent_word_obj['word'] = word
+                return accent_word_obj
     
     return word_obj 
 
-async def get_ed_word_defintions(word_obj, session):
+async def get_ed_word_defintions(word_obj, session, sem):
+    print('get_ed_word_defintions triggered')
     word = word_obj['word']
     # from -2 backwards
     if word[-2:] != "'d":
@@ -1435,108 +2009,109 @@ async def get_ed_word_defintions(word_obj, session):
     # add the ed
 
     ed_word = word[:-2] + 'ed'
-    # get_freq
-    url = f'https://api.datamuse.com/words?sp={ed_word}&md=df&max=2'
-    async with session.get(url, headers=headers) as response:
-        data = await response.json()
-        
-    if len(data) < 1:
-        word_obj['error'] = '404: Not found'
-        return word_obj
-    
-    word_frequency = float(data[0]['tags'][0][2:])
-
-    if word_frequency == 0 or word_frequency >= 4.8:
-        word_obj['isLowFreq'] = False
-        word_obj['error'] = None
-        return word_obj
-    
-    definition_functions = [
-        get_definitions,
-        get_definitions_dictionary,
-        get_definitions_datamuse,
-        get_definitions_wiktionary,
-        get_definitions_wiktionary_extra
-    ]
-
-    ed_word_obj = {'word': ed_word}
-
-    for func in definition_functions:
-        ed_word_obj = await func(ed_word_obj, session)
-        if ed_word_obj.get('error') is None:
-            ed_word_obj['headWord'] = ed_word_obj['word']
-            ed_word_obj['word'] = word
-            return ed_word_obj
-    
-    word_obj['error'] = '404: Not Found'
-    return word_obj 
-
-   
-    # get frequency 
-    # if < point  or == 0
-    # return low freq
-    # else
-    # get the sense (cascade)
-
-    # modify the values head word + main word
-    # return the value
-
-
-    
-
-    # accent_word_obj = await get_definitions(accent_word_obj, session)
-    # if accent_word_obj['error'] == None:
-    #     accent_word_obj['word'] = word
-    #     accent_word_obj['headWord'] = accent_word_obj['word']
-    #     return accent_word_obj
-
-    # accent_word_obj = await get_definitions_dictionary(accent_word_obj, session)
-    # if accent_word_obj['error'] == None:
-    #     accent_word_obj['word'] = word
-    #     accent_word_obj['headWord'] = accent_word_obj['word']
-    #     return accent_word_obj
-
-
-    # accent_word_obj = await get_definitions_datamuse(accent_word_obj, session)
-    # if accent_word_obj['error'] == None:
-    #     accent_word_obj['word'] = word
-    #     accent_word_obj['headWord'] = accent_word_obj['word']
-    #     return accent_word_obj
-
-
-    # accent_word_obj = await get_definitions_wiktionary(accent_word_obj, session)
-    # if accent_word_obj['error'] == None:
-    #     accent_word_obj['word'] = word
-    #     accent_word_obj['headWord'] = accent_word_obj['word']
-    #     return accent_word_obj
-    
-    # accent_word_obj = await get_definitions_wiktionary_extra(accent_word_obj, session)
-    # if accent_word_obj['error'] == None:
-    #     accent_word_obj['word'] = word
-    #     accent_word_obj['headWord'] = accent_word_obj['word']
-    #     return accent_word_obj
-
-
-
+    async with sem:
+        # get_freq
+        url = f'https://api.datamuse.com/words?sp={ed_word}&md=df&max=2'
+        async with session.get(url, headers=headers) as response:
+            data = await response.json()
             
-
+        if len(data) < 1:
+            word_obj['error'] = '404: Not found'
+            return word_obj
         
+        word_frequency = float(data[0]['tags'][0][2:])
+
+        if word_frequency == 0 or word_frequency >= 4.8:
+            word_obj['isLowFreq'] = False
+            word_obj['error'] = None
+            return word_obj
         
+        definition_functions = [
+            get_definitions,
+            get_definitions_dictionary,
+            get_definitions_datamuse,
+            get_definitions_wiktionary,
+            get_definitions_wiktionary_extra
+        ]
+
+        ed_word_obj = {'word': ed_word}
+
+        for func in definition_functions:
+            ed_word_obj = await func(ed_word_obj, session)
+            if ed_word_obj.get('error') is None:
+                ed_word_obj['headWord'] = ed_word_obj['word']
+                ed_word_obj['word'] = word
+                return ed_word_obj
+        
+        word_obj['error'] = '404: Not Found'
+        return word_obj 
+        
+        # Error does not equal anything
 
 
+async def format_word_headwords(headWordObjs):
+    print('format_word_headwords triggred')
+    sem = asyncio.Semaphore(20)
+    async with aiohttp.ClientSession() as session:
+        headword_tasks = [format_word_headword(headWord, session, sem=sem) for headWord in headWordObjs]
+        headword_objs = await asyncio.gather(*headword_tasks, return_exceptions=False)
 
+    low_freq_headwords = []
+    high_freq_headwords = []
+    for headword in headword_objs:
+        if headword == None:
+            continue
+        isLowFreq = headword.get('isLowFreq')
+        if isLowFreq == None:
+            continue
+        if isLowFreq == True:
+            low_freq_headwords.append(headword)
+        else:
+            high_freq_headwords.append(headword)
+
+    return low_freq_headwords, high_freq_headwords
     
-    # Error does not equal anything
 
+async def format_word_headword(headWordObj, session, sem):
+
+    headword = headWordObj.get('headWord')
+    if headword == None:
+        return None
     
-    {'word': 'invidious', 
-     'score': 39036, 
-     'tags': ['f:0.515366'], 
-     'defs': ['adj\tCausing ill will, envy, or offense. ', 
-              'adj\t(of a distinction) Offensively or unfairly discriminating. ', 
-              'adj\t(obsolete) Envious, jealous. ', 
-              'adj\tDetestable, hateful, or odious. (Often used in cases of perceived unfairness, or when facing a difficult situation or choice — especially in the phrase invidious position.) ']}
+    freq = await get_freq_(headword, session, sem)
+    print(freq)
+    if freq[0] >= 4.8:
+        word = {
+            "word": headword,
+            "isLowFreq": False,
+            "error": None,
+            "headWord": None
+        }
+        return word
+  
+    word = {
+            "word": headword,
+            "partsOfSpeech": headWordObj['partsOfSpeech'],
+            "pronunciation": headWordObj['pronunciation'],
+            # "senses": [],
+            # "senses": {},
+            "partOfSpeechSense": headWordObj['partOfSpeechSense'],
+            "headWord": headWordObj['word'],
+            "isLowFreq": headWordObj['isLowFreq'],
+            "isParentWord": headWordObj['isParentWord'],
+            "error": None
+    }
+    # word = {
 
+    # }
+  
+    # word['word'] = headword
+    # word['headWord'] = None
+    # word['error'] = None
+
+    # print(word, 'dkfdkkf')
+    return word
+    
 
 def get_freq(word):
     response = None
@@ -1589,47 +2164,68 @@ def get_freq(word):
             
     return float(response[0]['tags'][0][2:])
 
-async def get_freq_(word, session):
+async def get_freq_(word, session, sem):
+    # print(word)
     url = f'https://api.datamuse.com/words?sp={word}&md=df&max=2'
-    async with session.get(url, headers=headers) as response:
-        response = await response.json()
+    timeout = aiohttp.ClientTimeout(total=30, connect=10)
+    async with sem:
+        try:
+            # async with session.get(url, headers=headers, eaders={
+            async with session.get(
+                url,
+                timeout=timeout,
+                headers={
+                    "User-Agent": "poemScraper/1.0 (https://github.com/williamw/poemScraper)",
+                    "Accept": "application/json",
+                    "Accept-Encoding": "gzip, deflate",
+                }
+                ) as response:
+                status = response.status
+                if status < 200 or status > 299:
+                   
+                    raise Exception(f'{status}: {word}')
+                response = await response.json()
 
 
-    # May do something where I check the frequency of the current and compare it to a neear head word
-    # MAY access the [definition] if there -> def[headword] -> check "headword" frquency.... (as to ensure )
-    freq = 0.0 
-  
-    if len(response)==0: return freq, word
-    
-    if len(response) == 1: return float(response[0]['tags'][0][2:]), word
-
-    if word == 'forgets':
-        print('forgets')
-        print(response[0]['defHeadword'])
-        print(response[1]["word"])
-
-    try:
-        res_0 = response[0]['defHeadword'] 
-    except (IndexError, KeyError, TypeError):
-        return float(response[0]['tags'][0][2:]), word
-        res_0 = None
-    try:
-        res_1 = response[1]["word"]
-    except (IndexError, KeyError, TypeError):
-        res_1 = None
-        return float(response[0]['tags'][0][2:]), word
-
- 
-
-    if res_0 and res_1:
-        res_0_freq = float(response[0]['tags'][0][2:])
-        res_1_freq = float(response[1]['tags'][0][2:])
-        if res_0.lower() == res_1.lower():
-            print('Forgets')
-            if res_0_freq >= res_1_freq: return res_0_freq, word 
-            else: return res_1_freq, word
+            # May do something where I check the frequency of the current and compare it to a neear head word
+            # MAY access the [definition] if there -> def[headword] -> check "headword" frquency.... (as to ensure )
+            freq = 0.0 
+        
+            if len(response)==0: return freq, word
             
-    return float(response[0]['tags'][0][2:]), word
+            if len(response) == 1: return float(response[0]['tags'][0][2:]), word
+
+            if word == 'forgets':
+                # print('forgets')
+                # print(response[0]['defHeadword'])
+                # print(response[1]["word"])
+                pass
+
+            try:
+                res_0 = response[0]['defHeadword'] 
+            except (IndexError, KeyError, TypeError):
+                return float(response[0]['tags'][0][2:]), word
+                res_0 = None
+            try:
+                res_1 = response[1]["word"]
+            except (IndexError, KeyError, TypeError):
+                res_1 = None
+                return float(response[0]['tags'][0][2:]), word
+
+        
+
+            if res_0 and res_1:
+                res_0_freq = float(response[0]['tags'][0][2:])
+                res_1_freq = float(response[1]['tags'][0][2:])
+                if res_0.lower() == res_1.lower():
+                    # print('Forgets')
+                    if res_0_freq >= res_1_freq: return res_0_freq, word 
+                    else: return res_1_freq, word
+                    
+            return float(response[0]['tags'][0][2:]), word
+        except Exception as e:
+            print(e)
+            return 'error', word
 
     # return freq
 
@@ -1644,6 +2240,7 @@ def get_poems_word_freq():
     if not poem_objs:
         return
     
+
     visited = dict()
     
 
@@ -1677,51 +2274,241 @@ def get_poems_word_freq():
 
     return wordDict, visited 
 
-async def get_poems_word_freq_():
-    with open("ouput.json", "r", encoding='utf-8') as infile:
-        poem_objs = json.load(infile)
-    
-    # low = set()
-    # med = set()
-    wordDict = dict()
 
-    if not poem_objs:
-        return
-    
-    visited = dict()
-    
+async def get_poems_word_freq_(
+    file_name: str
+):
+    # with open("ouput__.json", "r", encoding='utf-8') as infile:
+    with open(file_name, "r", encoding='utf-8') as infile:
+        poem_objs = json.load(infile)
+    # print(len(poem_objs))
+    # return
+
+    timeout = aiohttp.ClientTimeout(total=30, connect=10)
     async with aiohttp.ClientSession() as session:
+        api_words = await get_all_words_from_api(session)
+        # print(api_words)
+        
+        # poem_objs = [
+        #     {
+        #     "title": "Test poem",
+        #     "poet": "H.D.",
+        #     "stanzas": [
+        #         [
+        #             "forgetfulness",
+        #         ],
+        #     ],
+        #     "source": "Poetry",
+        #     "date_published": "JANUARY, 1913"
+        # },
+        # {
+        #         "title": "\"In The Cool Of The Evening\"",
+        #         "poet": "Alfred Noyes",
+        #         "stanzas": [
+        #         [
+        #             "In the cool of the evening, when the low sweet whispers waken,",
+        #             "When the laborers turn them homeward, and the weary have their will,",
+        #             "When the censers of the roses o'er the forest aisles are shaken,",
+        #             "Is it but the wind that cometh o'er the far green hill?"
+        #         ],
+        #         [
+        #             "For they say 'tis but the sunset winds that wander through the heather,",
+        #             "Rustle all the meadow-grass and bend the dewy fern;",
+        #             "They say 'tis but the winds that bow the reeds in prayer together,",
+        #             "And fill the shaken pools with fire along the shadowy burn."
+        #         ],
+        #         [
+        #             "In the beauty of the twilight, in the Garden that He loveth,",
+        #             "They have veiled His lovely vesture with the darkness of a name!",
+        #             "Through His Garden, through His Garden, it is but the wind that moveth,",
+        #             "No more! But O the miracle, the miracle is the same."
+        #         ],
+        #         [
+        #             "In the cool of the evening, when the sky is an old story,",
+        #             "Slowly dying, but remembered, ay, and loved with passion still . . .",
+        #             "Hush! . . . the fringes of His garment, in the fading golden glory",
+        #             "Softly rustling as He cometh o'er the far green hill."
+        #         ]
+        #         ]
+        #     },
+        # ]
+        
+        # low = set()
+        # med = set()
+        sem = asyncio.Semaphore(10)
+        wordDict = dict()
+
+        if not poem_objs:
+            return
+        
+        visited = dict()
+        visited_ = set()
+
+        missed_words = []
+
+        all_words = []
+
+        # maybe I should just get all of the words first
         for idx, poem in enumerate(poem_objs):
             stanzas = poem['stanzas']
             for stanza in stanzas: 
                 for line in stanza:
                     words = line.split(' ')
-                    words = [word for word in words if word not in visited]
-                    words_cleaned = [clean_word(word, visited).lower() for word in words]
+                    words = [word for word in words if word.lower() not in visited and word.lower() not in api_words]
+                    words_cleaned = [clean_word_(word, visited).lower() for word in words]
                     
-                    freq_tasks = [get_freq_(word, session) for word in words_cleaned]
-                    freq_objects = await asyncio.gather(*freq_tasks, return_exceptions=False)
-                    # print(freq_objects)
-                    for freq, word in freq_objects:
-                        if word == '': continue
-                        # print(idx)
-                        if freq < 4.8:
-                            if word not in wordDict:
-                                wordDict[word] = {
-                                    'word': word,
-                                    'isLowFreq': True
-                                }
-                        else:
-                            if word not in wordDict:
-                                wordDict[word] = {
-                                    'word': word,
-                                    'isLowFreq': False
-                                }
+                    for word in words_cleaned:
+                        if word not in visited_: 
+                            visited_.add(word)
+                            all_words.append(word)
+        
+        # print(len(all_words))
+        all_words = [word for word in all_words if not api_words.get(word)]
+        # print(len(all_words))
+        # print(len(visited_))
+
+        for i in range(200):
+            print(i)
+            print(len(all_words))
+            mw = []
+            # for word in all_words:
+            if i % 3 == 0: await asyncio.sleep(300)          
+            else: await asyncio.sleep(60)          
+            freq_tasks = [get_freq_(word, session, sem) for word in all_words]
+            freq_objects = await asyncio.gather(*freq_tasks, return_exceptions=False)
+
+            # print(freq_objects)
+            for freq, word in freq_objects:
+                if word == '': continue
+                if freq == 'error':
+                    mw.append(word)
+                    continue
+
+                # print(idx)
+                if freq < 4.8:
+                    if word not in wordDict:
+                        wordDict[word] = {
+                            'word': word,
+                            'isLowFreq': True
+                        }
+                else:
+                    if word not in wordDict:
+                        wordDict[word] = {
+                            'word': word,
+                            'isLowFreq': False
+                        }
+            all_words = mw
+            if len(all_words) == 0: 
+                print('IT actually finished')
+                break
+
+
+                    
+    #     # return 
+    #     for idx, poem in enumerate(poem_objs):
+    #         stanzas = poem['stanzas']
+    #         for stanza in stanzas: 
+    #             for line in stanza:
+    #                 words = line.split(' ')
+
+         
+    #                 words = [word for word in words if word.lower() not in visited and word.lower() not in api_words]
+    #                 words_cleaned = [clean_word(word, visited).lower() for word in words]
+                    
+    #                 freq_tasks = [get_freq_(word, session, sem) for word in words_cleaned]
+    #                 freq_objects = await asyncio.gather(*freq_tasks, return_exceptions=False)
+
+    #                 # print(freq_objects)
+    #                 for freq, word in freq_objects:
+    #                     if word == '': continue
+    #                     if freq == 'error':
+    #                         missed_words.append(word)
+    #                         continue
+
+    #                     # print(idx)
+    #                     if freq < 4.8:
+    #                         if word not in wordDict:
+    #                             wordDict[word] = {
+    #                                 'word': word,
+    #                                 'isLowFreq': True
+    #                             }
+    #                     else:
+    #                         if word not in wordDict:
+    #                             wordDict[word] = {
+    #                                 'word': word,
+    #                                 'isLowFreq': False
+    #                             }
+        
+    #     print(len(missed_words))
+
+        # for i in range(20):
+        #     print(i)
+        #     print(len(missed_words))
+        #     mw = []
+        #     if len(missed_words) < 1: break
+        #     await asyncio.sleep(45)
+        #     # words = [word for word in missed_words if word not in visited]
+        #     words = [word for word in words if word.lower() not in visited and word.lower() not in api_words]
+        #     words_cleaned = [clean_word(word, visited).lower() for word in words]
+        #     freq_tasks = [get_freq_(word, session, sem) for word in words_cleaned]
+        #     freq_objects = await asyncio.gather(*freq_tasks, return_exceptions=True)
+
+        #     # print(freq_objects)
+        #     for freq, word in freq_objects:
+        #         if word == '': continue
+        #         if freq == 'error':
+        #             mw.append(word)
+        #             continue
+
+        #         # print(idx)
+        #         if freq < 4.8:
+        #             if word not in wordDict:
+        #                 wordDict[word] = {
+        #                     'word': word,
+        #                     'isLowFreq': True
+        #                 }
+        #         else:
+        #             if word not in wordDict:
+        #                 wordDict[word] = {
+        #                     'word': word,
+        #                     'isLowFreq': False
+        #                 }
+
+        #     missed_words = mw
+
+    
+
+    # for word in list(api_words):
+    #     if word in wordDict:
+    #         wordDict.pop(word, None)
+
+    # check = wordDict.get('vesture')
+    # if check: print('0p0p0p0p0p0p0p0p')
+
+
 
     return wordDict, visited 
 
 
-def dump_word_freq(d, v):
+async def get_all_words_from_api(session):
+    base_url = 'http://localhost:3000'
+    async with session.get(f'{base_url}/api/words') as res:
+        data = await res.json()
+        
+    
+    
+    word_objs = data['data']
+    word_dict = dict()
+    for word in word_objs:
+        word_dict[word['word']] = True
+    
+
+    return word_dict
+
+    
+
+def dump_word_freq(d):
+# def dump_word_freq(d, v):
     pre_word_objects = []
 
     i = 0
@@ -1730,15 +2517,18 @@ def dump_word_freq(d, v):
         pre_word_objects.append(v)
         if v['isLowFreq'] == True:
             i += 1
+    # for k, v in d.items():
+    #     pre_word_objects.append(v)
+    #     if v['isLowFreq'] == True:
+    #         i += 1
 
-    with open('word_freq_.json', 'w', encoding='utf-8') as f:
+    with open('word_freq_test.json', 'w', encoding='utf-8') as f:
         json.dump(pre_word_objects, f, ensure_ascii=False, indent=4)
 
 # elif 4.8 <= freq < 5.1:
 #         med.add(word)
 
-def clean_word(word: str, visited: dict):   
-    visited[word] = True
+def clean_word_(word: str, visited: dict):   
 
     if word == '——————' or word == '————————': return ''
 
@@ -1758,7 +2548,43 @@ def clean_word(word: str, visited: dict):
 
         if letter == '-' and idx + 1 < len(word) and word[idx+1] == '-':
             if 0 < idx < len(word) - 2:
-                cleaned_word.append(letter)
+                cleaned_word+=letter
+                continue
+
+        if letter in dash_chars:
+            if 0 < idx < len(word) - 1:
+                cleaned_word+=('-')
+                continue
+           
+        if letter.isalpha():
+            cleaned_word += letter
+    
+    return cleaned_word
+
+def clean_word(word: str, visited: dict):   
+    if visited.get(word):
+        return ''
+
+    if word == '——————' or word == '————————': return ''
+
+    if word.isalpha():
+        visited[word.lower()] = True
+        return word
+    
+    dash_chars = {"-", "–", "—", "\u2013", "\u2014"}
+    apos_chars = {"'", "’", "`"}
+
+    cleaned_word: str = ''
+    # print(len(word))
+    for idx, letter in enumerate(word):
+        if letter in apos_chars and 0 < idx < len(word)-1:
+        # if letter in ('"') and 0 < idx < len(word)-1:
+            cleaned_word += letter
+            continue
+
+        if letter == '-' and idx + 1 < len(word) and word[idx+1] == '-':
+            if 0 < idx < len(word) - 2:
+                cleaned_word+=letter
                 continue
 
         if letter in dash_chars:
@@ -1770,10 +2596,17 @@ def clean_word(word: str, visited: dict):
             cleaned_word += letter
     
     if cleaned_word not in visited:
-        visited[cleaned_word] = True
+        visited[cleaned_word.lower()] = True
     
 
     return cleaned_word
+
+def is_string_null_or_empty(string) -> bool:
+    if not string: return True
+    if len(string) < 1: return True
+
+    return False
+
 
 def format_accent_charaters(word):
 
@@ -1783,7 +2616,7 @@ def format_accent_charaters(word):
     )
 
 
-def group_defineition_objs(word_objs):
+def group_definition_objs(word_objs):
     low = []
     high = []
     missed = []
@@ -1797,162 +2630,267 @@ def group_defineition_objs(word_objs):
         isLowFreq = word_obj.get('isLowFreq')
         low.append(word_obj) if isLowFreq == True else high.append(word_obj)
 
+    print(low)
+    print(high)
+    print(missed)
+
     return low, high, missed
 
 
-async def get_word_objs_from_file():
-    
-    with open("word_freq_.json", "r", encoding='utf-8') as f:
-        freq_objs = json.load(f)
- 
-    freq_words = [w for w in freq_objs if w['isLowFreq'] == True]
-    low_freq_words = [w for w in freq_objs if w['isLowFreq'] == False]
+async def get_word_objs_from_file(freq_objs):
+    # webster_sem = asyncio.Semaphore(10)
+    # dictionary_sem = asyncio.Semaphore(25)
+    # datamuse_sem = asyncio.Semaphore(25)
+    # wiktionary_sem = asyncio.Semaphore(25)
+    # dash_sem = asyncio.Semaphore(25)
+    # wiktionary_extra_sem = asyncio.Semaphore(25)
+    # accent_sem = asyncio.Semaphore(25)
+    # ed_sem = asyncio.Semaphore(25)
 
-    low_freq_set = {w['word'] for w in low_freq_words}
-  
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Accept-Encoding": "gzip, deflate",
+        "Referer": "https://www.example.com/",
+        "Connection": "keep-alive",
+        "Cache-Control": "no-cache",
+    }
+    
+    # with open("dictionary_test.json", "r", encoding='utf-8') as f:
+    #     freq_objs = json.load(f)
+    # with open("word_freq_test.json", "r", encoding='utf-8') as f:
+    #     freq_objs = json.load(f)
+
+    # freq_objs = freq_objs[:10]
+    
+    
+    freq_words = [w for w in freq_objs if w['isLowFreq'] == True]
+    high_freq_words = [w for w in freq_objs if w['isLowFreq'] == False]
+    print(len(high_freq_words))
+    # return 
+    # print(freq_words)
+
+    # freq_words = freq_words[:]
+    # freq_words = [
+    #     # {
+    #     #     "word": "Joel",
+    #     #     "isLowFreq": True
+    #     # },
+    #     # {
+    #     #     "word": "eclectic",
+    #     #     "isLowFreq": True
+    #     # },
+    #     {
+    #         "word": "high",
+    #         "isLowFreq": True
+    #     },
+    #     # {
+    #     #     "word": "Venus",
+    #     #     "isLowFreq": True
+    #     # },
+    #     },
+    #     # {
+    #     #     "word": "throwers", ## there may be some kind of error with this, like a headword mismatch thing
+    #     #     "isLowFreq": True
+    #     # },
+    # ]
+    # freq_words = [
+    #     {
+    #         "word": "good-for-nothings",
+    #         "isLowFreq": True
+    #     },
+    # ]
+    # low_freq_set = {w['word'] for w in low_freq_words}
+    
     all_content = []
     low_freq_words = []
-    high_freq_words = []
+    # high_freq_words = []
     missed_words = []
-   
-    async with aiohttp.ClientSession() as session:
+    # freq_words = [{'word': 'lover-wise'}]
+    async with aiohttp.ClientSession(headers=headers) as session:
         # Filters word objects through dictionary containing websites to obtain defintions.
         # "Missed words" will attempt to be found on other websites and 
-        defintion_tasks = [get_definitions(word, session) for word in freq_words]
-        defintion_objs = await asyncio.gather(*defintion_tasks, return_exceptions=False)
-        low, high, missed = group_defineition_objs(defintion_objs)
+        ##
+        definition_objs = await get_definitions_websters_loop_entry(freq_words, session, webster_sem)
+        low, high, missed = group_definition_objs(definition_objs)
         low_freq_words.extend(low)
         high_freq_words.extend(high)
         missed_words = missed
-
-
-        # missed_words = [obj for obj in defintion_objs if obj['error'] is not None]
-        # high_freq_words = [obj for obj in defintion_objs if obj.get('isLowFreq') == True and obj['error'] is None]
-        # low_freq_words = [obj for obj in defintion_objs if obj.get('isLowFreq') == False and obj['error'] is None]
-        # all_content.extend([obj for obj in defintion_objs if obj['error'] == None])
-        
-
-        if len(missed_words) > 0:
-            defintion_tasks_1 = [get_definitions_dictionary(word, session) for word in missed_words]
-            defintion_objs_1 = await asyncio.gather(*defintion_tasks_1, return_exceptions=False)
-            low, high, missed = group_defineition_objs(defintion_objs_1)
-            low_freq_words.extend(low)
-            high_freq_words.extend(high)
-            missed_words = missed
-
-
-            # all_content.extend([obj for obj in defintion_objs_1 if obj['error'] == None])
-
-        if len(missed_words) > 0:
-            defintion_tasks_2 = [get_definitions_datamuse(word, session) for word in missed_words]
-            defintion_objs_2 = await asyncio.gather(*defintion_tasks_2, return_exceptions=False)
-            low, high, missed = group_defineition_objs(defintion_objs_2)
-            low_freq_words.extend(low)
-            high_freq_words.extend(high)
-            missed_words = missed
-
-
-            # missed_words = [obj for obj in defintion_objs_2 if obj['error'] != None]
-            # all_content.extend([obj for obj in defintion_objs_2 if obj['error'] == None])
+        ##
    
+
+        ##
+        if len(missed_words) > 0:
+            defintion_tasks_1 = [get_definitions_dictionary(word, session, dictionary_sem) for word in missed_words]
+            defintion_objs_1 = await asyncio.gather(*defintion_tasks_1, return_exceptions=False)
+            low, high, missed = group_definition_objs(defintion_objs_1)
+            low_freq_words.extend(low)
+            high_freq_words.extend(high)
+            missed_words = missed
+        #     print(defintion_objs_1)
+        #     print('Done')
+        ##
+        # with open('dictionary_test.json', 'w', encoding='utf-8') as f:
+        #     json.dump(defintion_objs_1, f, ensure_ascii=False, indent=2)
+            
+    
+        # return
+  
+
+        # print(low_freq_words, 'dkdkdkkdk')
+        # print(defintion_objs)
+
+
+        # Dictionary.com process
+        # if len(missed_words) > 0:
+        #     defintion_tasks_1 = [get_definitions_dictionary(word, session, dictionary_sem) for word in missed_words]
+        #     defintion_objs_1 = await asyncio.gather(*defintion_tasks_1, return_exceptions=False)
+        #     low, high, missed = group_definition_objs(defintion_objs_1)
+        #     low_freq_words.extend(low)
+        #     high_freq_words.extend(high)
+        #     missed_words = missed
+
+        # with open('dictionary_test.json', 'w', encoding='utf-8') as ff:
+        #     json.dump(missed_words, ff, ensure_ascii=False, indent=2)
+
+
+        # Datamuse API process
+
+        # for testing #
+        # defintion_tasks_2 = [get_definitions_datamuse(word, session, datamuse_sem) for word in freq_words]
+        # defintion_objs_2 = await asyncio.gather(*defintion_tasks_2, return_exceptions=False)
+        # low, high, missed = group_definition_objs(defintion_objs_2)
+        # low_freq_words.extend(low)
+        # high_freq_words.extend(high)
+        # missed_words = missed
+        # print(low_freq_words)
+        # for testing #
+
+        # somehitng about this part....
+        # Datamuse API process
+        ##
+        if len(missed_words) > 0:
+            # defintion_tasks_2 = [get_definitions_datamuse(word, session, datamuse_sem) for word in missed_words]
+            # defintion_objs_2 = await asyncio.gather(*defintion_tasks_2, return_exceptions=False)
+            defintion_objs_2 = await get_definitions_datamuse_loop_entry(word_objs=missed_words, session=session)
+            low, high, missed = group_definition_objs(defintion_objs_2)
+            low_freq_words.extend(low)
+            high_freq_words.extend(high)
+            missed_words = missed
+            with open('missed_words_testt.json', 'w', encoding='utf-8') as ff:
+                json.dump(missed_words, ff, ensure_ascii=False, indent=2)
+        ##
+        # defintion_objs_2 = await get_definitions_datamuse_loop_entry(word_objs=freq_objs, session=session)
+        # low, high, missed = group_definition_objs(defintion_objs_2)
+        # low_freq_words.extend(low)
+        # high_freq_words.extend(high)
+        # missed_words = missed
+        # with open('missed_words_testt.json', 'w', encoding='utf-8') as ff:
+        #     json.dump(missed_words, ff, ensure_ascii=False, indent=2)
+        # return
+
+        # '-eth' containing word process
         if len(missed_words) > 0:
             eth_tasks = [get_eth_word_defintions(word) for word in missed_words]
             eth_objs = await asyncio.gather(*eth_tasks, return_exceptions=False)
-            low, high, missed = group_defineition_objs(eth_objs)
+            low, high, missed = group_definition_objs(eth_objs)
             low_freq_words.extend(low)
             high_freq_words.extend(high)
             missed_words = missed
+            with open('missed_words_testt.json', 'w', encoding='utf-8') as ff:
+                json.dump(missed_words, ff, ensure_ascii=False, indent=2)
 
-
-            # missed_words = [obj for obj in eth_words if obj['error'] != None]
-            # all_content.extend([obj for obj in eth_words if obj['error'] == None])
-
+        # Wiktionary process
         if len(missed_words) > 0:
-            defintion_tasks_3 = [get_definitions_wiktionary(word, session) for word in missed_words]
+            defintion_tasks_3 = [get_definitions_wiktionary(word, session, wiktionary_sem) for word in missed_words]
             defintion_objs_3 = await asyncio.gather(*defintion_tasks_3, return_exceptions=False)
-            low, high, missed = group_defineition_objs(defintion_objs_3)
+            low, high, missed = group_definition_objs(defintion_objs_3)
             low_freq_words.extend(low)
             high_freq_words.extend(high)
             missed_words = missed
-            # missed_words = [obj for obj in defintion_objs_3 if obj['error'] != None]
-            # all_content.extend([obj for obj in defintion_objs_3 if obj['error'] == None])
+            with open('missed_words_testt.json', 'w', encoding='utf-8') as ff:
+                json.dump(missed_words, ff, ensure_ascii=False, indent=2)
+        
 
+
+        # '-' containing word process
         if len(missed_words) > 0:
-            dash_tasks = [get_dash_word_defintions(word, session) for word in missed_words]
+            dash_tasks = [get_dash_word_defintions(word, session, dash_sem) for word in missed_words]
             dash_obj_arrays = await asyncio.gather(*dash_tasks, return_exceptions=False)
             missed_words = []
             for obj_array in dash_obj_arrays:
-                low, high, missed = group_defineition_objs(obj_array)
+                low, high, missed = group_definition_objs(obj_array)
                 low_freq_words.extend(low)
                 high_freq_words.extend(high)
                 missed_words.extend(missed)
+            with open('missed_words_testt.json', 'w', encoding='utf-8') as ff:
+                json.dump(missed_words, ff, ensure_ascii=False, indent=2)
 
-                # for obj in obj_array:
-                    # <if true> if (condition) else <if false>
-                    # all_content.append(obj) if obj['error'] == None else missed_words.append(obj)
-
+        # Wiktionary process 2
         if len(missed_words) > 0:
-            defintion_tasks_4 = [get_definitions_wiktionary_extra(word, session) for word in missed_words]
+            defintion_tasks_4 = [get_definitions_wiktionary_extra(word, session, wiktionary_extra_sem) for word in missed_words]
             defintion_objs_4 = await asyncio.gather(*defintion_tasks_4, return_exceptions=False)
-            low, high, missed = group_defineition_objs(defintion_objs_4)
+            low, high, missed = group_definition_objs(defintion_objs_4)
             low_freq_words.extend(low)
             high_freq_words.extend(high)
             missed_words = missed
-            # missed_words = [obj for obj in defintion_objs_4 if obj['error'] != None]
-            # all_content.extend([obj for obj in defintion_objs_4 if obj['error'] == None])
+            with open('missed_words_testt.json', 'w', encoding='utf-8') as ff:
+                json.dump(missed_words, ff, ensure_ascii=False, indent=2)
 
+        # Accented word process
         if len(missed_words) > 0:
-            accent_tasks = [get_accent_word_definitions(word, session) for word in missed_words]
+            accent_tasks = [get_accent_word_definitions(word, session, accent_sem) for word in missed_words]
             accent_objs = await asyncio.gather(*accent_tasks, return_exceptions=False)
-            low, high, missed = group_defineition_objs(accent_objs)
+            low, high, missed = group_definition_objs(accent_objs)
             low_freq_words.extend(low)
             high_freq_words.extend(high)
             missed_words = missed
-            # missed_words = [obj for obj in accent_objs if obj['error'] != None]
-            # all_content.extend([obj for obj in accent_objs if obj['error'] == None])
+            with open('missed_words_testt.json', 'w', encoding='utf-8') as ff:
+                json.dump(missed_words, ff, ensure_ascii=False, indent=2)
 
+        # '-ed' word process
         if len(missed_words) > 0:
             missed_words = []
-            ed_tasks = [get_ed_word_defintions(word, session) for word in missed_words]
+            ed_tasks = [get_ed_word_defintions(word, session, ed_sem) for word in missed_words]
             ed_objs = await asyncio.gather(*ed_tasks, return_exceptions=False)
-            low, high, missed = group_defineition_objs(ed_objs)
+            low, high, missed = group_definition_objs(ed_objs)
             low_freq_words.extend(low)
             high_freq_words.extend(high)
             missed_words = missed
-            # missed_words = [obj for obj in ed_objs if obj['error'] != None]
-            # all_content.extend([obj for obj in ed_objs if obj['error'] == None])
+            with open('missed_words_testt.json', 'w', encoding='utf-8') as ff:
+                json.dump(missed_words, ff, ensure_ascii=False, indent=2)
+    
 
     # The sense formatting thing..
 
-    
+    hasHeadWordObjs = []
 
-    low_freq_words = [w for w in low_freq_words if w['word'] not in low_freq_set]
 
-    headWordObjs = []
     for word in low_freq_words:
         headWord = word.get('headWord')
         if headWord != None and headWord != '':
-            headWordObj = word
-            headWordObj['word'] = headWord
-            headWordObj['headWord'] = None
-            headWordObjs.append(headWordObj)
-            print(word)
-    print(headWordObjs[-1])
-    if len(headWordObjs) > 0:
-        for headWordObj in headWordObjs:
-            low_freq_words.append(headWordObj)
+            hasHeadWordObjs.append(word)
+    
+    
+    lowFreqHeadWordObjs, highFreqHeadWordObjs = await format_word_headwords(hasHeadWordObjs)
+
+    low_freq_words.extend([w for w in lowFreqHeadWordObjs if w['word'] not in low_freq_words])
+    high_freq_words.extend([w for w in highFreqHeadWordObjs if w['word'] not in high_freq_words]) 
+
+    print(low_freq_words)
 
 
-    with open('high_freq_words.json', 'w', encoding='utf-8') as f:
+    with open('high_freq_words_testti.json', 'a', encoding='utf-8') as f:
         json.dump(high_freq_words, f, ensure_ascii=False, indent=2)
 
-    with open('low_freq_words.json', 'w', encoding='utf-8') as f:
+    with open('low_freq_words_testti.json', 'a', encoding='utf-8') as f:
         json.dump(low_freq_words, f, ensure_ascii=False, indent=2)
 
-    with open('missed_words_.json', 'w', encoding='utf-8') as ff:
+    with open('missed_words_testti.json', 'a', encoding='utf-8') as ff:
         json.dump(missed_words, ff, ensure_ascii=False, indent=2)
 
 def remove_definition_reference(definition: str):
+    print(f'remove_definition_reference triggered: {definition}')
     definiton_parts = definition.split(' ')
 
     delete_id = 'delete-me'
@@ -1987,41 +2925,79 @@ def remove_definition_reference(definition: str):
 
     return ' '.join(definiton_parts_cleaned)
 
+async def get_word_objs_from_file_entry():
 
-# Basically, checking if a defintion has been found
+    with open("word_freq_test.json", "r", encoding='utf-8') as f:
+        freq_objs = json.load(f)
 
-# if p.class="spelling-suggestion-text".text.strip === "The word you've entered isn't in the dictionary. Click on a spelling suggestion below or try again using the search bar above."
+    # await get_word_objs_from_file()
+    # return
+    l = 0
+    r = 250
+    end = len(freq_objs)
+    print(end, 'this many')
+    while r < end:
+        print('--Curr iter--:', '[', l, ':', r, ']')
+        await get_word_objs_from_file(freq_objs[l:r])
+        l = r
+        r += 250
+    
+    if l < len(freq_objs):
+        await get_word_objs_from_file(freq_objs[l:])
+
+    pass
 
 async def main():
     start_time = time.perf_counter()
-    word_freq_dict, visited = await get_poems_word_freq_()
-    poem_duration = time.perf_counter() - start_time
+    # word_freq_dict, visited = await get_poems_word_freq_(file_name='output_new.json')
+    # poem_duration = time.perf_counter() - start_time
 
-    dump_word_freq(word_freq_dict, visited)
+
+    # dump_word_freq(word_freq_dict)
+    # return
+    # dump_word_freq(word_freq_dict, visited)
     post_dump_time = time.perf_counter()
-
-    await get_word_objs_from_file()
-    words_duration = time.perf_counter() - post_dump_time
+    
+    await get_word_objs_from_file_entry()
+    # words_duration = time.perf_counter() - post_dump_time
 
 
     total_duration = time.perf_counter() - start_time
 
-    print(f"Processed poems in {poem_duration} seconds")
-    print(f"Processed {len(word_freq_dict)} words in {words_duration} seconds")
+    # print(f"Processed poems in {poem_duration} seconds")
+    # print(f"Processed {len(word_freq_dict)} words in {words_duration} seconds")
     print(f"Total time: {total_duration} seconds")
-    # w = ':How are you (see how 1b)'
-    # w = ": any of various aquatic and chiefly marine brown, red, or green algae (such as rockweed, gulfweed, and kelp) that often grow in masses, typically have leaflike blades (see blade entry 1 sense 2e), are usually anchored to a solid substrate (such as a rock) by holdfasts (see holdfast sense 2a), and include some (such as dulse, laver, and sea lettuce) that are used as food"
-    # w = ': to make or lay (something) bare (see bare entry 1) : uncover'
-    # w = ': kept for breeding (see breed entry 1 sense 3)'
 
-    # print(c)
-   
-
-    # await get_word_objs_from_file()
 
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # Basically, checking if a defintion has been found
+
+    # if p.class="spelling-suggestion-text".text.strip === "The word you've entered isn't in the dictionary. Click on a spelling suggestion below or try again using the search bar above."
+
     # may try catch this
     # freqSession = requests.session()
     # word_freq_dict, visited = get_poems_word_freq()
@@ -2252,3 +3228,96 @@ if __name__ == "__main__":
         ]
     }
 ] 
+
+
+
+        # Subsenses
+        # syl_pron_container = header_entry.find('div', class_='row entry-attr mb-3 mt-2')  # SYLLABLE PRONOUNCIATION CONTAIENR
+        # if syl_pron_container:
+        #     word_syllable_repr = ''
+        #     if syl_pron_container.find('span', class_='word-syllables-entry'):  
+        #         word_syllable_repr = syl_pron_container.find('span', class_='word-syllables-entry').text  # WORD'S SYLLABLE REPRESENTION 
+        #     word_pronounciation = syl_pron_container.find_all('span', class_='prons-entries-list-inline mb-1')  # WORD PRONOUNCIATION REPRESNETION // MAY BE A LIST
+        ############
+
+        # # definition_sense_container = pos_data_entry.find('div', class_='vg-sseq-entry-item')  # SENSE ENTRY
+        # definition_sense_containers = definitions_container.find_all('div', class_='vg-sseq-entry-item')  # SENSE ENTRY
+
+        # for i, definition_sense_container in enumerate(definition_sense_containers):
+
+        #     definition_subsense_containers = definition_sense_container.find_all('div', class_='sb-entry')  # LIST OF SUBSENSE CONTAINERS
+
+        #     for idx, definition_subsense_container in enumerate(definition_subsense_containers):
+        #         definition_text = definition_subsense_container.find('span', class_='dtText')  # DEFINITION TEXT
+        #         if definition_text:
+        #             print(f'{idx + 1} Definition', definition_text.text)
+
+        #         examples = definition_subsense_container.find_all('div', class_='sub-content-thread mb-3')  # ASSOCIATED EXAMPLE(S) IF ANY
+        #         if len(examples) > 0:
+        #             for example in examples:
+        #                 print('Examples:', example.text)
+
+        #     print('-------------------')
+
+        # options.add_argument("window-size=1200X600")
+
+# prefs = {"profile.managed_default_content_settings.images": 2}
+# options.add_experimental_option("prefs", prefs)
+# options.page_load_strategy = "eager"  
+
+# def get_word_page_webster(word):
+#     driver = webdriver.Chrome(options=options)
+
+#     try:
+#         driver.get("https://www.merriam-webster.com/")
+#         driver.set_window_position(0, 0)
+#         driver.set_window_size(957, 970)
+
+#         driver.implicitly_wait(10)
+#         search_box_container_home = driver.find_element('id', 'home-search-form')
+#         search_box_home = search_box_container_home.find_element('id', 'home-search-term')
+#         search_box_home.click()
+
+#         driver.implicitly_wait(15)
+
+#         search_box_container = driver.find_element('id', 'search-form')
+#         search_box = search_box_container.find_element('id', 'search-term')
+#         search_box.send_keys(word)
+
+#         search_button = search_box_container.find_element('id', 'search-form-submit-btn')
+#         search_button.click()
+
+#         driver.implicitly_wait(15)
+
+#         url = driver.current_url
+
+#         return url  
+#     finally: 
+#         driver.close()
+        # driver.quit()
+# user_agents = [
+#     # Chrome - macOS
+#     "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+#     # Safari - macOS
+#     "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15",
+#     # Chrome - Linux
+#     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+
+# ]
+
+# entry-word-section-container diff part of speech
+        # print(word)
+
+        # ex_sense = {
+        #     'definition': None,
+        #     'example': None
+        # }
+        # genreally ignore a subsense -> subsense
+
+    #         {'word': 'invidious', 
+    #  'score': 39036, 
+    #  'tags': ['f:0.515366'], 
+    #  'defs': ['adj\tCausing ill will, envy, or offense. ', 
+    #           'adj\t(of a distinction) Offensively or unfairly discriminating. ', 
+    #           'adj\t(obsolete) Envious, jealous. ', 
+    #           'adj\tDetestable, hateful, or odious. (Often used in cases of perceived unfairness, or when facing a difficult situation or choice — especially in the phrase invidious position.) ']}

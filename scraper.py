@@ -4,6 +4,18 @@ import json
 import re
 import time
 
+# Going to do some re ordering of this to get the poems by the "date" they were originally created
+def get_poems_date(soup):
+    dates = soup.css.select('tr > td.tdc > b > big')
+    dates_set = {}
+
+    for date in dates:
+        # dates_set[date] = date.sourceline
+        print(date.sourceline)
+    
+    
+
+
 # RETURNS A LIST OF POEM DIVS
 # BASED ON DIV.POEM (GUTENBERG)
 def get_poems(soup):
@@ -17,6 +29,9 @@ def get_poems(soup):
         # if div.find('b'):
         #     print(div.find('b').get_text())
     return poems
+
+# /[A-Za-z0-9]+,\s[0-9]{4}
+# /[A-Za-z0-9]+,\s[0-9]{4}/gm
 
 
 # RETURNS A LIST OF STANZAS 
@@ -42,7 +57,7 @@ def build_poems(poems):
 # RETURNS A POEM_OBJ 
 # FROM DIV.POEM (GUTENBERG)
 def build_poem(poem):
-    
+    date = get_date(poem)
 
     all_stanzas = get_stanzas(poem)  # all div.stanza elements
     if not all_stanzas:
@@ -88,7 +103,9 @@ def build_poem(poem):
     poem_obj = {
         "title": title,
         "poet": poet,
-        "stanzas": stanzas
+        "stanzas": stanzas,
+        "source": "Poetry",
+        "date_published": date.strip()
     }
 
     return poem_obj
@@ -106,21 +123,44 @@ def extract_text(els):
 
     return stanza_text
 
+# GETS POEM'S DATE
+def get_date(poem):
+    print('Get date function')
+
+    prev_date = poem.find_previous('td', class_='tdc')
+    date = ''
+    while date == '' and prev_date:
+        date_tag = prev_date.css.select_one('b > big')
+        if date_tag != None:
+            date = date_tag.text
+        else:
+            prev_date = prev_date.find_previous('td', class_='tdc')
+
+    return date
     
 
-# resposne = requests.get('https://www.gutenberg.org/files/43224/43224-h/43224-h.htm')
-# resposne.encoding = "utf-8"
-# html_data = resposne.text
+resposne = requests.get('https://www.gutenberg.org/files/43224/43224-h/43224-h.htm')
+resposne.encoding = "utf-8"
+html_data = resposne.text
 
-# soup = BeautifulSoup(html_data, 'html.parser')
+soup = BeautifulSoup(html_data, 'html.parser')
 
-# poems = get_poems(soup)
+# with open('source.html', 'w', encoding='utf-8') as f:
+#     f.write(soup.prettify())
+
+# get_poems_date(soup)
+
+poems = get_poems(soup)
+# print(poems[0], '--')
 
 # # print(poems)
-# poem_objs = build_poems(poems)
+poem_objs = build_poems(poems)
 
-# with open("ouput.json", "w", encoding='utf-8') as outfile:
-#     json.dump(poem_objs, outfile, ensure_ascii=False, indent=4)
+# print(poem_objs[-1])
+
+
+with open("ouput__.json", "w", encoding='utf-8') as outfile:
+    json.dump(poem_objs, outfile, ensure_ascii=False, indent=4)
 
 # with open("ouput.json", "r") as infile:
 #     poem_objs = json.load(infile)

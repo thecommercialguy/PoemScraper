@@ -1,0 +1,19 @@
+[
+  {
+    "poetObj": {
+      "first_name": "Muna",
+      "middle_name": null,
+      "last_name": "Lee",
+      "birth_date": "January 29, 1895",
+      "nationality": "American",
+      "birth_place": "Raymond, Mississippi, United States",
+      "alt_names": [
+        "Muna Lee"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/muna_lee_b845c097",
+      "error": null
+    },
+    "poems": [],
+    "error": null
+  }
+]

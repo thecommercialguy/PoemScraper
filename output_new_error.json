@@ -1,0 +1,982 @@
+[
+  {
+    "poetObj": {
+      "first_name": "Louise",
+      "middle_name": "Townsend",
+      "last_name": "Nicholl",
+      "birth_date": "1890",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Louise Townsend Nicholl"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Charles",
+      "middle_name": "Badger",
+      "last_name": "Clark",
+      "birth_date": null,
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "\"Spanish Is the Loving Tongue\" is a song based on the poem \"A Border Affair\" written by Charles Badger Clark in 1907. Clark was a cowboy poet who lived throughout the American West, and was named the Poet Laureate of South Dakota in 1937. The poem was set to music in 1925 by Billy Simon.[1]"
+      ],
+      "profile_picture_url": "",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Valery",
+      "middle_name": null,
+      "last_name": "Bryusov",
+      "birth_date": "December 13, 1873",
+      "nationality": "",
+      "birth_place": "Moscow, Russian Empire",
+      "alt_names": [
+        "Valery Yakovlevich Bryusov"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/valery_bryusov_c37039b5",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Carlyle",
+      "middle_name": "Ferren",
+      "last_name": "MacIntyre",
+      "birth_date": "July 16, 1890",
+      "nationality": "American",
+      "birth_place": "Des Moines, Iowa",
+      "alt_names": [
+        "C. F. MacIntyre",
+        "Carlyle Ferren MacIntyre"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Edward",
+      "middle_name": "J.",
+      "last_name": "O'Brien",
+      "birth_date": "July 31, 1949",
+      "nationality": "American",
+      "birth_place": "Boston, Massachusetts",
+      "alt_names": [
+        "Mark O'Brien (poet)",
+        "Mark O'Brien"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "T.",
+      "middle_name": "S.",
+      "last_name": "Eliot",
+      "birth_date": "September 26, 1888",
+      "nationality": "American",
+      "birth_place": "St. Louis, Missouri, U.S.",
+      "alt_names": [
+        "Thomas Stearns Eliot"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/t._s._eliot_f346edaa",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Lily",
+      "middle_name": "Augusta",
+      "last_name": "Long",
+      "birth_date": "1862",
+      "nationality": "American",
+      "birth_place": "St. Paul, Minnesota",
+      "alt_names": [
+        "Lily A. Long",
+        "Lily Augusta Long"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/lily_a._long_4942ed14",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Elizabeth",
+      "middle_name": "Gibson",
+      "last_name": "Cheyne",
+      "birth_date": "January 2, 1869",
+      "nationality": "English",
+      "birth_place": "Hexham, Northumberland, United Kingdom",
+      "alt_names": [
+        "Elizabeth Gibson Cheyne"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/elizabeth_gibson_cheyne_d254ed48",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Edna",
+      "middle_name": "Worthley",
+      "last_name": "Underwood",
+      "birth_date": "January 1873 \u2013",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Edna Worthley Underwood"
+      ],
+      "profile_picture_url": "",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Raymond",
+      "middle_name": null,
+      "last_name": "Holden",
+      "birth_date": "April 7, 1894,",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Raymond Peckham Holden"
+      ],
+      "profile_picture_url": "",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Li",
+      "middle_name": null,
+      "last_name": "Bai",
+      "birth_date": "701",
+      "nationality": "",
+      "birth_place": "Suiye, China[a]",
+      "alt_names": [
+        "Li Bai"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/li_bai_34021ecf",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Alfred",
+      "middle_name": "Perceval",
+      "last_name": "Graves",
+      "birth_date": "July 22, 1846",
+      "nationality": "Irish",
+      "birth_place": "Dublin, Ireland",
+      "alt_names": [
+        "Alfred Perceval Graves"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/alfred_perceval_graves_55c27447",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Howard",
+      "middle_name": null,
+      "last_name": "Buck",
+      "birth_date": "October 23, 1894",
+      "nationality": "American",
+      "birth_place": "Chicago, Illinois, U.S.",
+      "alt_names": [
+        "Howard Swazey Buck"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Catherine",
+      "middle_name": null,
+      "last_name": "Wells",
+      "birth_date": "July 08, 1872",
+      "nationality": "English",
+      "birth_place": " Islington, London",
+      "alt_names": [
+        "Catherine Wells"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/catherine_wells_60614ed1",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Nelson",
+      "middle_name": "Antrim",
+      "last_name": "Crawford",
+      "birth_date": "May 4, 1888",
+      "nationality": "American",
+      "birth_place": "Miller, South Dakota",
+      "alt_names": [
+        "Nelson Antrim Crawford"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/nelson_antrim_crawford_374d8ed0",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Richard",
+      "middle_name": null,
+      "last_name": "Aldington",
+      "birth_date": "July 08, 1892",
+      "nationality": "English",
+      "birth_place": "Portsmouth, Hampshire, England",
+      "alt_names": [
+        "Richard Aldington"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/richard_aldington_6aa390b5",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Pauline",
+      "middle_name": "Dunwell",
+      "last_name": "Partridge",
+      "birth_date": "February 27, 1879",
+      "nationality": "American",
+      "birth_place": "Lyons, New York, U.S.",
+      "alt_names": [
+        "Pauline D. Partridge",
+        "Pauline Dunwell Partridge"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/pauline_d._partridge_7d66c3cd",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "John",
+      "middle_name": null,
+      "last_name": "Cournos",
+      "birth_date": "March 6, 1881",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "John Cournos, born Ivan Grigorievich Korshun"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/john_cournos_0510be1e",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "George",
+      "middle_name": null,
+      "last_name": "O'Neil",
+      "birth_date": "September 13, 1896",
+      "nationality": "American",
+      "birth_place": "St. Louis, Missouri, U.S.",
+      "alt_names": [
+        "George O'Neil"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Agnes",
+      "middle_name": null,
+      "last_name": "Lee",
+      "birth_date": "March 06, 1862",
+      "nationality": "American",
+      "birth_place": "Chicago, Illinois, U.S.",
+      "alt_names": [
+        "Agnes Lee"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/agnes_lee_8a4dd6dd",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "John",
+      "middle_name": null,
+      "last_name": "Rodker",
+      "birth_date": "December 18, 1894",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "John Rodker"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/john_rodker_57a52a73",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "D.",
+      "middle_name": "H.",
+      "last_name": "Lawrence",
+      "birth_date": "September 11, 1885",
+      "nationality": "English",
+      "birth_place": "Eastwood, Nottinghamshire, England",
+      "alt_names": [
+        "David Herbert Lawrence"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/d._h._lawrence_bc743770",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Pauline",
+      "middle_name": "B.",
+      "last_name": "Barrington",
+      "birth_date": null,
+      "nationality": "American",
+      "birth_place": "Pasadena, California",
+      "alt_names": [
+        "Pauline B. Barrington"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/pauline_b._barrington_c9819a60",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Allan",
+      "middle_name": null,
+      "last_name": "Updegraff",
+      "birth_date": "February 14, 1883",
+      "nationality": "American",
+      "birth_place": "Grinnell, Iowa",
+      "alt_names": [
+        "Allan Eugene Updegraff"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Beatrice",
+      "middle_name": null,
+      "last_name": "Ravenel",
+      "birth_date": "August 24, 1870",
+      "nationality": "American",
+      "birth_place": "Charleston, South Carolina, U.S.",
+      "alt_names": [
+        "Beatrice Witte Ravenel"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Joseph",
+      "middle_name": "Moncure",
+      "last_name": "March",
+      "birth_date": "July 27, 1899",
+      "nationality": "American",
+      "birth_place": "New York City, New York",
+      "alt_names": [
+        "Joseph Moncure March"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Fiske",
+      "middle_name": null,
+      "last_name": "Conant",
+      "birth_date": "April 29, 1874",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Isabella Howe Fiske Conant"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/fiske_conant_710acaf2",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Marjorie",
+      "middle_name": "Allen",
+      "last_name": "Seiffert",
+      "birth_date": "February 15, 1885",
+      "nationality": "American",
+      "birth_place": "Moline, Illinois",
+      "alt_names": [
+        "Marjorie Allen Seiffert"
+      ],
+      "profile_picture_url": "",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Nancy",
+      "middle_name": null,
+      "last_name": "Campbell",
+      "birth_date": "February 12, 1978",
+      "nationality": "English",
+      "birth_place": "Exeter, England",
+      "alt_names": [
+        "Nancy Campbell is a British poet, non-fiction writer and publisher of artist's books. Her first collection of poetry, Disko Bay"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Madison",
+      "middle_name": null,
+      "last_name": "Cawein",
+      "birth_date": "March 23, 1865",
+      "nationality": "American",
+      "birth_place": "Louisville, Kentucky, U.S.",
+      "alt_names": [
+        "Madison Julius Cawein"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/madison_cawein_a428a586",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Alice",
+      "middle_name": "Corbin Henderson, Harriet",
+      "last_name": "Monroe",
+      "birth_date": "April 16, 1881",
+      "nationality": "American",
+      "birth_place": "St. Louis, Missouri",
+      "alt_names": [
+        "Alice Corbin Henderson"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Conrad",
+      "middle_name": null,
+      "last_name": "Aiken",
+      "birth_date": "August 05, 1889",
+      "nationality": "American",
+      "birth_place": "Savannah, Georgia, U.S.",
+      "alt_names": [
+        "Conrad Potter Aiken"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/conrad_aiken_d10d9537",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Bliss",
+      "middle_name": null,
+      "last_name": "Carman",
+      "birth_date": "April 15, 1861",
+      "nationality": "Canadian",
+      "birth_place": "Fredericton, New Brunswick, Canada",
+      "alt_names": [
+        "William Bliss Carman"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/bliss_carman_3a5d6abd",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "P.",
+      "middle_name": "D.",
+      "last_name": "James",
+      "birth_date": "August 03, 1920",
+      "nationality": "English",
+      "birth_place": "Oxford, England",
+      "alt_names": [
+        "P. D.",
+        "Phyllis Dorothy James White, Baroness James of Holland Park"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/p._d._fb02a66f",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Julie",
+      "middle_name": "K.",
+      "last_name": "Wetherill",
+      "birth_date": "July 15, 1858",
+      "nationality": "American",
+      "birth_place": "Woodville, Mississippi, U.S",
+      "alt_names": [
+        "J. K. Wetherill",
+        "Julia Kein Baker"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/j._k._wetherill_8db88ca3",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Robert",
+      "middle_name": null,
+      "last_name": "McAlmon",
+      "birth_date": "March 09, 1895",
+      "nationality": "American",
+      "birth_place": "Clifton, Kansas, U.S.",
+      "alt_names": [
+        "Robert M. McAlmon",
+        "Robert Menzies McAlmon"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/robert_m._mcalmon_1318e01a",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "John",
+      "middle_name": null,
+      "last_name": "McClure",
+      "birth_date": "December 19, 1893",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "John Peebles McClure"
+      ],
+      "profile_picture_url": "",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Seumas",
+      "middle_name": null,
+      "last_name": "O'Sullivan",
+      "birth_date": null,
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Seumas or Seamus O'Sullivan"
+      ],
+      "profile_picture_url": "",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Florence",
+      "middle_name": null,
+      "last_name": "Ayscough",
+      "birth_date": "January 21, 1875",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Florence Ayscough MacNair"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/florence_ayscough_ca2babef",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Henry",
+      "middle_name": "C.",
+      "last_name": "Thomas",
+      "birth_date": "March 03, 1878",
+      "nationality": "English",
+      "birth_place": "Lambeth, Surrey, England",
+      "alt_names": [
+        "Edward Thomas (poet)",
+        "Philip Edward Thomas"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/henry_c._thomas_c38a3a14",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Julia",
+      "middle_name": null,
+      "last_name": "Cooley",
+      "birth_date": "July 4, 1883",
+      "nationality": "American",
+      "birth_place": "Seymour, Connecticut, US",
+      "alt_names": [
+        "Julia Cooley Altrocchi"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Janet",
+      "middle_name": "Loxley",
+      "last_name": "Lewis",
+      "birth_date": "August 17, 1899",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Janet Loxley Lewis"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/janet_loxley_lewis_ae20a7f8",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "H.",
+      "middle_name": "L.",
+      "last_name": "Davis",
+      "birth_date": "October 18, 1894",
+      "nationality": "American",
+      "birth_place": "Douglas County, Oregon, U.S.",
+      "alt_names": [
+        "Harold Lenoir Davis"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/h._l._davis_a4a41638",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Emanuel",
+      "middle_name": null,
+      "last_name": "Morgan",
+      "birth_date": "August 10, 1881",
+      "nationality": "American",
+      "birth_place": "New York City, U.S.",
+      "alt_names": [
+        "Harold Witter Bynner"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/emanuel_morgan_eb9cf8dd",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "John",
+      "middle_name": "G.",
+      "last_name": "Neihardt",
+      "birth_date": "January 8, 1881",
+      "nationality": "American",
+      "birth_place": "Sharpsburg, Illinois",
+      "alt_names": [
+        "John Gneisenau Neihardt"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/john_g._neihardt_4f303fce",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Louise",
+      "middle_name": "Morey",
+      "last_name": "Bowman",
+      "birth_date": "June 19, 1886",
+      "nationality": "Canadian",
+      "birth_place": "Montreal, Canada",
+      "alt_names": [
+        "Beatrice Redpath"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/louise_morey_bowman_b214699f",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "James",
+      "middle_name": "Church",
+      "last_name": "Alvord",
+      "birth_date": "January 24, ['1', '8', '6', '2', '1']",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "James Church Alvord"
+      ],
+      "profile_picture_url": "",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Lee",
+      "middle_name": "Wilson",
+      "last_name": "Dodd",
+      "birth_date": "July 11, 1879",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Lee Wilson Dodd"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Macha",
+      "middle_name": null,
+      "last_name": "Rosenthal",
+      "birth_date": "March 14, 1917",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "A. A. Rosenthal",
+        "Macha Louis Rosenthal"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Struthers",
+      "middle_name": null,
+      "last_name": "Burt",
+      "birth_date": "October 18, 1882",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Maxwell Struthers Burt"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Charles",
+      "middle_name": "R.",
+      "last_name": "Murphy",
+      "birth_date": "January 10, 1951",
+      "nationality": "American",
+      "birth_place": "Hibbing, Minnesota, U.S.",
+      "alt_names": [
+        "Timothy Murphy (poet)",
+        "Timothy Iver Murphy"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Evelyn",
+      "middle_name": null,
+      "last_name": "Scott",
+      "birth_date": "January 17, 1893",
+      "nationality": "American",
+      "birth_place": "Clarksville, Tennessee",
+      "alt_names": [
+        "Evelyn Scott"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Eda",
+      "middle_name": "Lou",
+      "last_name": "Walton",
+      "birth_date": "January 19, 1894",
+      "nationality": "American",
+      "birth_place": "Deming, New Mexico, US",
+      "alt_names": [
+        "Eda Lou Walton"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/eda_lou_walton_d9f85d43",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Alice",
+      "middle_name": "Corbin",
+      "last_name": "Henderson",
+      "birth_date": "April 16, 1881",
+      "nationality": "American",
+      "birth_place": "St. Louis, Missouri",
+      "alt_names": [
+        "Alice Corbin Henderson"
+      ],
+      "profile_picture_url": null,
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Thomas",
+      "middle_name": "Wood",
+      "last_name": "Stevens",
+      "birth_date": null,
+      "nationality": "American",
+      "birth_place": "Dixon, Illinois",
+      "alt_names": [
+        "Thomas Wood Stevens"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/thomas_wood_stevens_c794fa15",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "Isidor",
+      "middle_name": null,
+      "last_name": "Schneider",
+      "birth_date": "August 23, 1896",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "Isidor Schneider"
+      ],
+      "profile_picture_url": "",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  },
+  {
+    "poetObj": {
+      "first_name": "M.",
+      "middle_name": "D.",
+      "last_name": "Armstrong",
+      "birth_date": "1709",
+      "nationality": "",
+      "birth_place": "",
+      "alt_names": [
+        "John Armstrong (poet)",
+        "Dr. John Armstrong"
+      ],
+      "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/m._d._armstrong_76a0e417",
+      "error": null
+    },
+    "poems": [],
+    "error": "Not found"
+  }
+]

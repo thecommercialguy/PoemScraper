@@ -1,0 +1,419 @@
+[
+    {
+        "id": "c06e5dc6-819f-47d2-9529-fc81552cc8f7",
+        "first_name": "Edmund",
+        "last_name": "Broadus",
+        "bio": null,
+        "profile_url": "poets/c06e5dc6-819f-47d2-9529-fc81552cc8f7",
+        "profile_picture_url": null,
+        "birth_date": null,
+        "birth_place": null,
+        "nationality": null,
+        "created_at": "2025-12-15T22:13:10.862Z",
+        "updated_at": "2025-12-15T22:13:10.862Z",
+        "middle_name": "Kemper",
+        "error": null,
+        "alt_names": null,
+        "birth_year": null
+    },
+    {
+        "id": "a6dbe3f5-2d29-490e-9dc7-f0496f533a66",
+        "first_name": "Alice",
+        "last_name": "Corbin",
+        "bio": null,
+        "profile_url": "poets/a6dbe3f5-2d29-490e-9dc7-f0496f533a66",
+        "profile_picture_url": null,
+        "birth_date": "1881-04-16T05:50:36.000Z",
+        "birth_place": "St. Louis, Missouri",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:14.415Z",
+        "updated_at": "2025-12-15T22:13:14.415Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Alice Corbin Henderson"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "b63b04d9-ae6a-4d09-8299-f724a81ccead",
+        "first_name": "Witter",
+        "last_name": "Bynner",
+        "bio": null,
+        "profile_url": "poets/b63b04d9-ae6a-4d09-8299-f724a81ccead",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/witter_bynner_09b3df04",
+        "birth_date": "1881-08-10T05:50:36.000Z",
+        "birth_place": "New York City, U.S.",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.221Z",
+        "updated_at": "2025-12-15T22:13:47.221Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Harold Witter Bynner"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "df3a7702-14da-4619-af03-abe94ef0a5a5",
+        "first_name": "Ernest",
+        "last_name": "Rhys",
+        "bio": null,
+        "profile_url": "poets/df3a7702-14da-4619-af03-abe94ef0a5a5",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/ernest_rhys_d800044d",
+        "birth_date": "1859-07-17T05:50:36.000Z",
+        "birth_place": "Islington, London, England",
+        "nationality": "English",
+        "created_at": "2025-12-15T22:13:47.222Z",
+        "updated_at": "2025-12-15T22:13:47.222Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Ernest Percival Rhys"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "29fa6535-33db-417e-b2d1-1c7594e672c4",
+        "first_name": "Ridgely",
+        "last_name": "Torrence",
+        "bio": null,
+        "profile_url": "poets/29fa6535-33db-417e-b2d1-1c7594e672c4",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/ridgely_torrence_6037dd64",
+        "birth_date": "1874-11-27T05:50:36.000Z",
+        "birth_place": "Xenia, Ohio, U.S.",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.224Z",
+        "updated_at": "2025-12-15T22:13:47.224Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Frederic Ridgely Torrence"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "6efb6122-9c6c-4ace-8d66-60e8f3478b7a",
+        "first_name": "Madison",
+        "last_name": "Cawein",
+        "bio": null,
+        "profile_url": "poets/6efb6122-9c6c-4ace-8d66-60e8f3478b7a",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/madison_cawein_9f6c7341",
+        "birth_date": "1865-03-23T05:50:36.000Z",
+        "birth_place": "Louisville, Kentucky, U.S.",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.228Z",
+        "updated_at": "2025-12-15T22:13:47.228Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Madison Julius Cawein"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "ec394936-d150-4f3a-b922-ac0506616588",
+        "first_name": "Clark",
+        "last_name": "Smith",
+        "bio": null,
+        "profile_url": "poets/ec394936-d150-4f3a-b922-ac0506616588",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/clark_ashton_smith_7a26334f",
+        "birth_date": "1893-01-13T06:00:00.000Z",
+        "birth_place": "Long Valley, California, U.S.",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.236Z",
+        "updated_at": "2025-12-15T22:13:47.236Z",
+        "middle_name": "Ashton",
+        "error": null,
+        "alt_names": [
+            "Clark Ashton Smith"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "89b82c27-45a1-4215-ab2d-3e27ab72eab0",
+        "first_name": "Alice",
+        "last_name": "Meynell",
+        "bio": null,
+        "profile_url": "poets/89b82c27-45a1-4215-ab2d-3e27ab72eab0",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/alice_meynell_65cb23fd",
+        "birth_date": "1847-10-11T05:50:36.000Z",
+        "birth_place": "Barnes, London, England,  United Kingdom of Great Britain and Ireland",
+        "nationality": "English",
+        "created_at": "2025-12-15T22:13:47.237Z",
+        "updated_at": "2025-12-15T22:13:47.237Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Alice Christiana Gertrude Meynell"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "b53d9f50-29dd-4e38-8004-7970ab6de876",
+        "first_name": "Grace",
+        "last_name": "Conkling",
+        "bio": null,
+        "profile_url": "poets/b53d9f50-29dd-4e38-8004-7970ab6de876",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/grace_hazard_conkling_a25da76a",
+        "birth_date": "1878-02-07T05:50:36.000Z",
+        "birth_place": "New York City",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.238Z",
+        "updated_at": "2025-12-15T22:13:47.238Z",
+        "middle_name": "Hazard",
+        "error": null,
+        "alt_names": [
+            "Grace Walcott Hazard Conkling"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "8905019f-5db9-41b7-a7ed-6b32c2115686",
+        "first_name": "George",
+        "last_name": "Sterling",
+        "bio": null,
+        "profile_url": "poets/8905019f-5db9-41b7-a7ed-6b32c2115686",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/george_sterling_b8f49261",
+        "birth_date": "1869-12-01T05:50:36.000Z",
+        "birth_place": "Sag Harbor, Suffolk County, New York, U.S.",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.239Z",
+        "updated_at": "2025-12-15T22:13:47.239Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "College of Physicians and Surgeons"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "dfb4ca96-2ce6-47be-80aa-8e5bc1fc583b",
+        "first_name": "Richard",
+        "last_name": "Aldington",
+        "bio": null,
+        "profile_url": "poets/dfb4ca96-2ce6-47be-80aa-8e5bc1fc583b",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/richard_aldington_4546b2bd",
+        "birth_date": "1892-07-08T06:00:00.000Z",
+        "birth_place": "Portsmouth, Hampshire, England",
+        "nationality": "English",
+        "created_at": "2025-12-15T22:13:47.243Z",
+        "updated_at": "2025-12-15T22:13:47.243Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Richard Aldington"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "437dd405-cbef-4b0d-910d-d75e2606f7a8",
+        "first_name": "Alfred",
+        "last_name": "Noyes",
+        "bio": null,
+        "profile_url": "poets/437dd405-cbef-4b0d-910d-d75e2606f7a8",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/alfred_noyes_abbf9760",
+        "birth_date": "1880-09-16T05:50:36.000Z",
+        "birth_place": "Wolverhampton, England",
+        "nationality": "English",
+        "created_at": "2025-12-15T22:13:47.528Z",
+        "updated_at": "2025-12-15T22:13:47.528Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Alfred Noyes CBE"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "99ec5c02-eabf-42b1-8717-126673897107",
+        "first_name": "Ezra",
+        "last_name": "Pound",
+        "bio": null,
+        "profile_url": "poets/99ec5c02-eabf-42b1-8717-126673897107",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/ezra_pound_8dfcbbaf",
+        "birth_date": "1885-10-30T06:00:00.000Z",
+        "birth_place": "Hailey, Idaho",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.710Z",
+        "updated_at": "2025-12-15T22:13:47.710Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Ezra Weston Loomis Pound"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "707a93d6-ce42-40e3-86bc-0c62abad9877",
+        "first_name": "Lily",
+        "last_name": "Long",
+        "bio": null,
+        "profile_url": "poets/707a93d6-ce42-40e3-86bc-0c62abad9877",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/lily_a._long_aeee64a4",
+        "birth_date": null,
+        "birth_place": "St. Paul, Minnesota",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.808Z",
+        "updated_at": "2025-12-15T22:13:47.808Z",
+        "middle_name": "A.",
+        "error": null,
+        "alt_names": [
+            "Lily Augusta Long",
+            "Lily Augusta Long"
+        ],
+        "birth_year": "St. Paul, Minnesota"
+    },
+    {
+        "id": "43269a1e-e2f9-4f35-bb6d-2e4f908fcd61",
+        "first_name": "Agnes",
+        "last_name": "Lee",
+        "bio": null,
+        "profile_url": "poets/43269a1e-e2f9-4f35-bb6d-2e4f908fcd61",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/agnes_lee_c3c7dfc7",
+        "birth_date": "1841-02-27T05:50:36.000Z",
+        "birth_place": "Arlington Plantation, Arlington County, Virginia, U.S.",
+        "nationality": "",
+        "created_at": "2025-12-15T22:13:47.809Z",
+        "updated_at": "2025-12-15T22:13:47.809Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Eleanor Agnes Lee"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "0149cea3-8a8e-476b-822a-536a799c3734",
+        "first_name": "William",
+        "last_name": "Yeats",
+        "bio": null,
+        "profile_url": "poets/0149cea3-8a8e-476b-822a-536a799c3734",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/william_butler_yeats_cfe0a1c2",
+        "birth_date": "1865-06-13T05:50:36.000Z",
+        "birth_place": "Sandymount, County Dublin, Ireland",
+        "nationality": "Irish",
+        "created_at": "2025-12-15T22:13:47.809Z",
+        "updated_at": "2025-12-15T22:13:47.809Z",
+        "middle_name": "Butler",
+        "error": null,
+        "alt_names": [
+            "William Butler Yeats"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "ab53eb63-95d7-4045-bf1f-7f7d45e4fe91",
+        "first_name": "Margaret",
+        "last_name": "Widdemer",
+        "bio": null,
+        "profile_url": "poets/ab53eb63-95d7-4045-bf1f-7f7d45e4fe91",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/margaret_widdemer_f87c6c33",
+        "birth_date": "1884-09-30T06:00:00.000Z",
+        "birth_place": "Doylestown, Pennsylvania",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.809Z",
+        "updated_at": "2025-12-15T22:13:47.809Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Margaret Widdemer"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "e8a83d66-14da-4a8e-a998-fb0008233a0a",
+        "first_name": "John",
+        "last_name": "Reed",
+        "bio": null,
+        "profile_url": "poets/e8a83d66-14da-4a8e-a998-fb0008233a0a",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/john_reed_9fa71c58",
+        "birth_date": "1887-10-22T06:00:00.000Z",
+        "birth_place": "Portland, Oregon, U.S.",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:47.808Z",
+        "updated_at": "2025-12-15T22:13:47.808Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "John Silas Reed"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "09beee0e-a3fc-48bc-b437-89469f63a877",
+        "first_name": "H.D.",
+        "last_name": null,
+        "bio": null,
+        "profile_url": "poets/09beee0e-a3fc-48bc-b437-89469f63a877",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/h.d._d97e6804",
+        "birth_date": "1886-09-10T06:00:00.000Z",
+        "birth_place": "Bethlehem, Pennsylvania, U.S.",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:50.055Z",
+        "updated_at": "2025-12-15T22:13:50.055Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Hilda Doolittle"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "4240c938-50ec-416d-93d0-adddfb72e27e",
+        "first_name": "Arthur",
+        "last_name": "Ficke",
+        "bio": null,
+        "profile_url": "poets/4240c938-50ec-416d-93d0-adddfb72e27e",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/arthur_davison_ficke_b8cd2e47",
+        "birth_date": "1883-11-10T05:50:36.000Z",
+        "birth_place": "Davenport, Iowa, US",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:13:50.084Z",
+        "updated_at": "2025-12-15T22:13:50.084Z",
+        "middle_name": "Davison",
+        "error": null,
+        "alt_names": [
+            "Arthur Davison Ficke"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "8466e13f-a0a8-46c9-9988-b197ad1495cd",
+        "first_name": "H.D.",
+        "last_name": null,
+        "bio": null,
+        "profile_url": "poets/8466e13f-a0a8-46c9-9988-b197ad1495cd",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/h.d._e01754dc",
+        "birth_date": "1886-09-10T06:00:00.000Z",
+        "birth_place": "Bethlehem, Pennsylvania, U.S.",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:39:46.455Z",
+        "updated_at": "2025-12-15T22:39:46.455Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Hilda Doolittle"
+        ],
+        "birth_year": null
+    },
+    {
+        "id": "2c2ce1cc-c829-4ec8-a7cc-dd36409d7630",
+        "first_name": "H.D.",
+        "last_name": null,
+        "bio": null,
+        "profile_url": "poets/2c2ce1cc-c829-4ec8-a7cc-dd36409d7630",
+        "profile_picture_url": "https://d3eqbj00kgn0hf.cloudfront.net/poets/h.d._12be38e2",
+        "birth_date": "1886-09-10T06:00:00.000Z",
+        "birth_place": "Bethlehem, Pennsylvania, U.S.",
+        "nationality": "American",
+        "created_at": "2025-12-15T22:40:15.714Z",
+        "updated_at": "2025-12-15T22:40:15.714Z",
+        "middle_name": null,
+        "error": null,
+        "alt_names": [
+            "Hilda Doolittle"
+        ],
+        "birth_year": null
+    }
+]
